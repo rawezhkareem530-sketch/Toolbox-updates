@@ -2,7 +2,7 @@
 <html lang="ckb" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="tb-build" content="202611162205">
+<meta name="tb-build" content="202611162245">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#F4F4F6">
 <title>ToolBox</title>
@@ -15106,7 +15106,7 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
             </tbody></table></div>` : W('', `<div class="sr-txt muted">${_t('هێشتا هیچ پاشەکەوتێک لەم ئامێرەدا نییە.')}</div>`), '', _t('هەر پاشەکەوتێک دوای دروستکردنی خۆکار دەپشکنرێت.'))}
         ${G(_t('پشکنینی فایل'), R(_t('فایلێکی پاشەکەوت بپشکنە'), `<label class="btn ghost sm">${ic('check')}${_t('هەڵبژاردنی فایل')}<input type="file" accept="application/json,.json" data-bk-check hidden></label>`, _t('دەزانیت تەواوە و چی تێدایە؛ هیچ شتێک ناگۆڕدرێت.')))}`, bkOld ? 'warn' : '')}
       ${sec('data', 'layers', _t('داتا'), `
-        ${G(_t('دەربارە'), R(`<span class="set-about">${LOGO}ToolBox</span>`, `<span class="muted">${_t('وەشانی')} <span class="num">${APP_VERSION}</span></span>`, `${_t('هەموو داتاکە لەسەر ئەم کۆمپیوتەرە هەڵدەگیرێت.')} ✓ ${_t('ئەم وەشانە بە ئۆنلاین هات.')}`) + '<div data-upd></div>')}
+        ${G(_t('دەربارە'), R(`<span class="set-about">${LOGO}ToolBox</span>`, `<span class="muted">${_t('وەشانی')} <span class="num" data-app-ver>${APP_VERSION}</span></span>`, `${_t('هەموو داتاکە لەسەر ئەم کۆمپیوتەرە هەڵدەگیرێت.')} ✓ ${_t('ئەم وەشانە بە ئۆنلاین هات.')}`) + '<div data-upd></div>')}
         ${G(_t('تەندروستی داتا'), '<div class="sr"><span class="muted">…</span></div>', 'data-health')}
         ${archGroup()}
         ${ctx.user.role === 'admin' ? G(_t('سڕینەوە'), R(_t('سڕینەوەی هەموو داتا'), `<button class="btn ghost sm danger-t" data-wipe ${C.hasRecords() ? '' : 'disabled'}>${ic('trash')}${_t('سڕینەوە')}</button>${Restore.hasUndo && Restore.undoKind === 'wipe' ? `<button type="button" class="btn ghost sm" data-restore-undo>${ic('undo')}${_t('گەڕانەوە')}</button>` : ''}`, _t('کاڵا، فرۆشتن، کڕیار، دابینکەر، خەرجی و شیفتەکان. ڕێکخستن و بەکارهێنەران دەمێننەوە. پێشتر کۆپییەک هەڵدەگیرێت.'))) : ''}`)}
@@ -15381,8 +15381,9 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
         { const box = $('[data-upd]', root), H = window.ToolBoxHost;
           if (box && H && H.shell) Promise.all([H.shell.info(), H.full ? H.full.info().catch(() => null) : null]).then(([si, fi]) => {
             if (!si || !box.isConnected) return;
+            const av = $('[data-app-ver]', root); if (av && fi && fi.version) av.textContent = fi.version;   // the installed app's own version (1.0.2…)
             const b = String(si.build || ''), d = /^\d{12}$/.test(b) ? new Date(Date.UTC(+b.slice(0, 4), +b.slice(4, 6) - 1, +b.slice(6, 8), +b.slice(8, 10), +b.slice(10, 12))) : null;
-            box.insertAdjacentHTML('afterend', `<div class="sr"><div class="sr-l"><span class="fl">${_t('بەشی ویندۆز')}</span><small class="sr-h">${si.using === 'update' ? _t('نوێکراوە لە ئینتەرنێتەوە') : _t('هەمان ئەوەی لەگەڵ دامەزراندن هات')}${si.failed ? ` · ${_t('وەشانێک نەکرایەوە و گەڕایەوە بۆ پێشوو')}` : ''}</small></div><div class="sr-c"><span class="muted">${d ? fDT(d.toISOString()) : '—'}${fi && fi.version ? ` · Setup <span class="num">${esc(fi.version)}</span>` : ''}</span></div></div>`);
+            box.insertAdjacentHTML('afterend', `<div class="sr"><div class="sr-l"><span class="fl">${_t('بەشی ویندۆز')}</span><small class="sr-h">${si.using === 'update' ? _t('نوێکراوە لە ئینتەرنێتەوە') : _t('هەمان ئەوەی لەگەڵ دامەزراندن هات')}${si.failed ? ` · ${_t('وەشانێک نەکرایەوە و گەڕایەوە بۆ پێشوو')}` : ''}</small></div><div class="sr-c"><span class="muted">${d ? fDT(d.toISOString()) : '—'}</span></div></div>`);
           }).catch(() => { /* an older Windows part */ }); }
         const bc = $('[data-bk-check]', root); if (bc) bc.onchange = e => { const file = e.target.files[0]; e.target.value = ''; if (!file) return; file.text().then(t => Restore.check(t, file)).catch(() => toast(T.err.badFile)); };
         $$('[data-restore-undo]', root).forEach(ru => { ru.onclick = () => Restore.undo(); });
