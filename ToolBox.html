@@ -2,7 +2,7 @@
 <html lang="ckb" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="tb-build" content="202611161929">
+<meta name="tb-build" content="202611161937">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#F4F4F6">
 <title>ToolBox</title>
@@ -15020,7 +15020,7 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
             </tbody></table></div>` : W('', '<div class="sr-txt muted">هێشتا هیچ پاشەکەوتێک لەم ئامێرەدا نییە.</div>'), '', 'هەر پاشەکەوتێک دوای دروستکردنی خۆکار دەپشکنرێت.')}
         ${G('پشکنینی فایل', R('فایلێکی پاشەکەوت بپشکنە', `<label class="btn ghost sm">${ic('check')}هەڵبژاردنی فایل<input type="file" accept="application/json,.json" data-bk-check hidden></label>`, 'دەزانیت تەواوە و چی تێدایە؛ هیچ شتێک ناگۆڕدرێت.'))}`, bkOld ? 'warn' : '')}
       ${sec('data', 'layers', 'داتا', `
-        ${G('دەربارە', R(`<span class="set-about">${LOGO}ToolBox</span>`, `<span class="muted">وەشانی <span class="num">${APP_VERSION}</span></span>`, 'هەموو داتاکە لەسەر ئەم کۆمپیوتەرە هەڵدەگیرێت.') + '<div data-upd></div>')}
+        ${G('دەربارە', R(`<span class="set-about">${LOGO}ToolBox</span>`, `<span class="muted">وەشانی <span class="num">${APP_VERSION}</span></span>`, 'هەموو داتاکە لەسەر ئەم کۆمپیوتەرە هەڵدەگیرێت. ✓ ئەم وەشانە بە ئۆنلاین هات.') + '<div data-upd></div>')}
         ${G('تەندروستی داتا', '<div class="sr"><span class="muted">…</span></div>', 'data-health')}
         ${archGroup()}
         ${ctx.user.role === 'admin' ? G('سڕینەوە', R('سڕینەوەی هەموو داتا', `<button class="btn ghost sm danger-t" data-wipe ${C.hasRecords() ? '' : 'disabled'}>${ic('trash')}سڕینەوە</button>${Restore.hasUndo && Restore.undoKind === 'wipe' ? `<button type="button" class="btn ghost sm" data-restore-undo>${ic('undo')}گەڕانەوە</button>` : ''}`, 'کاڵا، فرۆشتن، کڕیار، دابینکەر، خەرجی و شیفتەکان. ڕێکخستن و بەکارهێنەران دەمێننەوە. پێشتر کۆپییەک هەڵدەگیرێت.')) : ''}`)}

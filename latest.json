@@ -1,9 +1,9 @@
 {
  "app": "ToolBox",
- "build": "202611161929",
- "sha256": "697a6ae14e83e2715f5404f91e64b675c8d3656ea717cb2c0df36dbd7c2a6f45",
- "size": 2569155,
- "notes": "نوێکردنەوەی ئۆنلاین، ناوی ئامێرەکان، Google Drive",
- "at": "2026-11-16T19:29:23.304Z",
- "sig": "rErsRB5XL76dtBFevVPosIOcKUzDBxp6s9NRrICgumFRL1cH105nldCsoWSi+tNmS94Csh6uO8v8Xv1qmCdSjA=="
+ "build": "202611161937",
+ "sha256": "4453beb9390cce61a963e76665ad47a06ec933e1f82af01703eb2ac40b028819",
+ "size": 2569207,
+ "notes": "تاقیکردنەوەی نوێکردنەوەی ئۆنلاین",
+ "at": "2026-11-16T19:37:59.458Z",
+ "sig": "k2POhPYKQg6cGvdCcHMz2W02KcX8fe+hS9QkHQN85ZGiqP1fc0xxrlbMrqLQ6TB0PYnHN3laWrU4/Cwncpyu/Q=="
 }
