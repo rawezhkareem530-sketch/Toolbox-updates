@@ -2,7 +2,7 @@
 <html lang="ckb" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="tb-build" content="202611161937">
+<meta name="tb-build" content="202611161942">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#F4F4F6">
 <title>ToolBox</title>
@@ -4659,6 +4659,10 @@ input.f[type=date]::-webkit-date-and-time-value,input.f[type=datetime-local]::-w
 .ph-join-l .opt{font-weight:500}
 .ph-join .ph-join-l input{letter-spacing:normal;font-size:16px;min-height:44px;text-align:start}
 .log-dev{white-space:nowrap}
+
+#ntPanel.nt2 .nt-menu{position:fixed;inset:auto;right:auto;z-index:95;min-width:190px;background:var(--card)!important;border:1px solid var(--line);border-radius:12px;box-shadow:0 14px 34px rgba(0,0,0,.22);padding:4px;display:flex;flex-direction:column;opacity:1;-webkit-backdrop-filter:none;backdrop-filter:none}
+#ntPanel.nt2 .nt-menu button{color:var(--ink)}
+#ntPanel.nt2 .nt-menu .neg{color:var(--danger)}
 </style>
 </head>
 <body>
@@ -15571,7 +15575,15 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
     if (p._html === html) return;
     const sc = $('.nt-list', p) ? $('.nt-list', p).scrollTop : 0;
     p.innerHTML = html; p._html = html; p.classList.toggle('is-empty', !shown.length);
-    $('.nt-list', p).scrollTop = sc;
+    const list = $('.nt-list', p); list.scrollTop = sc;
+    const mn = $('.nt-menu', p), mb = $('[data-nmenu][aria-expanded="true"]', p);
+    if (mn && mb) {
+      const r = mb.getBoundingClientRect(), w = mn.offsetWidth, h = mn.offsetHeight;
+      let top = r.bottom + 4; if (top + h > innerHeight - 8) top = Math.max(8, r.top - h - 4);
+      const left = Math.max(8, Math.min(innerWidth - w - 8, r.right - w));
+      mn.style.top = top + 'px'; mn.style.left = left + 'px';
+      setTimeout(() => { list.onscroll = () => { if (ntOpenMenu) { ntOpenMenu = null; list.onscroll = null; renderPanel(); } }; }, 80);
+    } else list.onscroll = null;
   }
   function placePanel(anchor) {
     const p = $('#ntPanel'); if (!p) return;
