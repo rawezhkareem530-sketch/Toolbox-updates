@@ -1,10 +1,10 @@
 {
  "app": "ToolBox",
- "build": "202611161957",
- "sha256": "047ace995171275f1236862c86e0066a8275b148a23e5e8b8a27d3fac3b3c19c",
- "size": 2570460,
- "notes": "ئایکۆنی نوێی پڕبەشاشە",
- "file": "ToolBox-202611161957.html",
- "at": "2026-11-16T19:57:40.625Z",
- "sig": "YAQx7W0uKdcvF02SXBEJ0GJE3VA90zGFDSMFPjFaQ+w8heHex2NqPKgMcnMjEag+XEUKZ5lpbF+nadOXElZKMA=="
+ "build": "202611162049",
+ "sha256": "51ecf0e6107a26be560c896f0d21154860168a95fcb2fe94f541b698bb1300f1",
+ "size": 2886621,
+ "notes": "زمانی عەرەبی و ئینگلیزی · ژمارەی کوردی/عەرەبی · زمانی پسوڵە",
+ "file": "ToolBox-202611162049.html",
+ "at": "2026-11-16T20:53:00.642Z",
+ "sig": "+904+eQL44z9UVv3NNTGi8Mp74ThmzinAzcdS0fPPGsQN/K7kkAhPYKiJz661jWXZZT7uBuoNnS0TFjO9M6Rhg=="
 }
