@@ -1,10 +1,10 @@
 {
  "app": "ToolBox",
- "build": "202611161946",
- "sha256": "0d102e2ca2f9bab893e142d25b9806d364584e285d13109495784885c55efff5",
- "size": 2570348,
- "notes": "چاکردنی مینیوی ⋯ ی ئاگادارکردنەوەکان، و نوێکردنەوەی ئۆنلاینی جێگیرتر",
- "file": "ToolBox-202611161946.html",
- "at": "2026-11-16T19:46:25.635Z",
- "sig": "68esvS6unqd3zVAOhmjA09splv6At30vqEYj8xaRlwF/jzyBjNGet4pzQhUhZpzbA+slUQfYqmqLRysNFaID4Q=="
+ "build": "202611161957",
+ "sha256": "047ace995171275f1236862c86e0066a8275b148a23e5e8b8a27d3fac3b3c19c",
+ "size": 2570460,
+ "notes": "ئایکۆنی نوێی پڕبەشاشە",
+ "file": "ToolBox-202611161957.html",
+ "at": "2026-11-16T19:57:40.625Z",
+ "sig": "YAQx7W0uKdcvF02SXBEJ0GJE3VA90zGFDSMFPjFaQ+w8heHex2NqPKgMcnMjEag+XEUKZ5lpbF+nadOXElZKMA=="
 }
