@@ -1,17 +1,17 @@
 {
  "app": "ToolBox",
- "build": "202611162142",
- "sha256": "d2c3a772ce89db21095a45072a93b92bc1caf812d56bddc0abb54bab185d647e",
- "size": 2889555,
- "notes": "بەشی ویندۆزیش لە ئەپدەیتی ئۆنڵاین",
- "file": "ToolBox-202611162142.html",
- "at": "2026-11-16T21:42:57.024Z",
- "sig": "U1T9BCYyEjKCMT3bVrtNI1gTZgAaKNCj1b4w7YGUSQDW2y2zxbwYD8K713EOFNU5VZkr2QiwWvSXzyqUcD/K5g==",
+ "build": "202611162205",
+ "sha256": "85a042d8296dfe18ad27621e04b4cbf8c823920867e2e6ce43d6ce61fa5f5181",
+ "size": 2891142,
+ "notes": "تاقیکردنەوەی ئەپدەیتی بەشی ویندۆز · ڕێکخستن › داتا: بەشی ویندۆز",
+ "file": "ToolBox-202611162205.html",
+ "at": "2026-11-16T22:05:28.676Z",
+ "sig": "U46rEPFdeTwamPuljg3s5Mgf0X9q4ZVsYBgPzzB9SNlFTXTFfdFQQGns3UhGGTxu9Je2SNU+vuSrcNyldYwPVA==",
  "shell": {
-  "build": "202611162142",
-  "file": "ToolBox-shell-202611162142.json",
-  "sha256": "313df6d6693da6c6b0d116e657b13640dbe992bb1a0bc9d728b274c4ff3dcac6",
-  "size": 67859,
+  "build": "202611162205",
+  "file": "ToolBox-shell-202611162205.json",
+  "sha256": "2d96ca15bee80b7c0734fb9a6f179241bf5013747a207e7d45c19b4592a40afe",
+  "size": 67906,
   "minLauncher": 1,
   "minElectron": 33
  }
