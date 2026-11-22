@@ -2,7 +2,7 @@
 <html lang="ckb" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="tb-build" content="202611222235">
+<meta name="tb-build" content="202611222236">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#F4F4F6">
 <title>ToolBox</title>
@@ -4806,9 +4806,6 @@ html[dir=ltr] .i-chev,html[dir=ltr] .i-back{scale:-1 1}
 .pgrid .pitem-top .nm .nm-b{font-weight:500}
 .pgrid .pitem .pfav{top:12px!important;bottom:auto!important;inset-inline-end:12px!important;background:color-mix(in srgb,var(--card) 85%,transparent)}
 .cart.is-empty [data-cart-close]{display:none!important}
-.img-peek{position:fixed;z-index:90;width:300px;height:300px;padding:10px;background:#fff;border-radius:14px;box-shadow:0 0 0 .5px rgba(0,0,0,.12),0 12px 32px rgba(0,0,0,.22);pointer-events:none;animation:imgPeekIn .12s ease-out}
-.img-peek img{width:100%;height:100%;object-fit:contain;display:block}
-@keyframes imgPeekIn{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
 </style>
 </head>
 <body>
@@ -8860,7 +8857,7 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
     const gridKey = `${ctx.saleList.key}|${saleShow}|${ctx.hiProd}|${new Date().toDateString()}`;
     if (!ctx.saleGrid || ctx.saleGrid.key !== gridKey) ctx.saleGrid = { key: gridKey, html: !C.db.products.length ? `<div class="card empty">${_t('هیچ کاڵایەک تۆمار نەکراوە.')} <a class="more" href="#/products?new=1">${_t('کاڵای نوێ زیاد بکە')}</a></div>`
       : !prods.length ? `<div class="card empty">${_t('هیچ کاڵایەک نەدۆزرایەوە')}</div>`
-      : `<div class="pgrid">${saleBundles(q)}${prods.slice(0, saleShow).map((p, k) => `<button class="pitem ${p.fav ? 'is-fav' : ''} ${k === ctx.hiProd ? 'kb-hi' : ''}" data-add="${p.id}" title="${esc(p.name)}" ${sellable(p) ? '' : 'disabled'}>
+      : `<div class="pgrid">${saleBundles(q)}${prods.slice(0, saleShow).map((p, k) => `<button class="pitem ${p.fav ? 'is-fav' : ''} ${k === ctx.hiProd ? 'kb-hi' : ''}" data-add="${p.id}" ${p.image ? '' : `title="${esc(p.name)}"`} ${sellable(p) ? '' : 'disabled'}>
           <span class="pfav ${p.fav ? 'on' : ''}" data-fav="${p.id}" role="button" title="${p.fav ? _t('لابردن لە دڵخوازەکان') : _t('دڵخواز: هەمیشە لە سەرەوە')}" aria-label="${_t('دڵخواز')}">${p.fav ? '★' : '☆'}</span>
           <div class="pitem-top">${thumb(p)}<span class="nm">${esc(p.name)}${p.brand && p.name.toLowerCase().includes(p.brand.trim().toLowerCase()) ? '' : nameTag(p)}</span></div><span class="pr">${saleCardPrice(p)}</span>
           ${saleCardStock(p)}${promoBadge(p)}</button>`).join('')}</div>`
@@ -16056,24 +16053,6 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
   addEventListener('resize', () => { const p = $('#ntPanel'); if (p && !p.hidden) placePanel(); });
   try { if (window.ToolBoxHost && ToolBoxHost.notify) ToolBoxHost.notify.onClick(() => { if (ctx.user) openPanel(); }); } catch (e) { /* older Windows part */ }
   function tbDate() { const d = new Date(); $$('[data-tb-date]').forEach(el => { el.innerHTML = `<span class="num">${fDate(d)}</span> · <span class="num">${fTime(d)}</span>`; }); }
-  (function imgPeek() {   // hover a product picture: the same picture, shown bigger beside the card (no new file, nothing stored)
-    let t = 0, box = null;
-    const hide = () => { clearTimeout(t); if (box) { box.remove(); box = null; } };
-    document.addEventListener('mouseover', e => {
-      const img = e.target.closest && e.target.closest('.pgrid .pitem-top img.thumb');
-      if (!img) return; if (!matchMedia('(hover:hover)').matches) return;
-      clearTimeout(t); t = setTimeout(() => {
-        const src = img.currentSrc || img.src; if (!src || !img.isConnected) return;
-        hide(); box = document.createElement('div'); box.className = 'img-peek'; box.innerHTML = `<img src="${src}" alt="">`; document.body.appendChild(box);
-        const card = img.closest('.pitem') || img, r = card.getBoundingClientRect(), w = box.offsetWidth, h = box.offsetHeight;
-        const right = innerWidth - r.right, left = r.left;   // the side with more room
-        const x = right >= w + 16 || right >= left ? Math.min(r.right + 10, innerWidth - w - 8) : Math.max(8, r.left - w - 10);
-        box.style.left = x + 'px'; box.style.top = Math.max(8, Math.min(r.top, innerHeight - h - 8)) + 'px';
-      }, 350);
-    });
-    document.addEventListener('mouseout', e => { if (e.target.closest && e.target.closest('.pgrid .pitem-top img.thumb')) hide(); });
-    ['mousedown', 'keydown', 'wheel', 'hashchange'].forEach(k => addEventListener(k, hide, true));
-  })();
   const fsCheck = () => document.documentElement.classList.toggle('is-fs', !!document.fullscreenElement || (innerWidth >= screen.width && innerHeight >= screen.height));   // full screen hides the Windows clock: show ours
   document.addEventListener('fullscreenchange', fsCheck); addEventListener('resize', fsCheck); fsCheck();
   setInterval(() => { if (ctx.user) refreshBell(true); }, 60000);
