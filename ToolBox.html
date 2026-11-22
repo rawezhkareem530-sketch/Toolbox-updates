@@ -2,7 +2,7 @@
 <html lang="ckb" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="tb-build" content="202611221830">
+<meta name="tb-build" content="202611221840">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#F4F4F6">
 <title>ToolBox</title>
@@ -16596,6 +16596,13 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
     swap(view, oldLay, tpl, newLay);
     return true;
   }
+  let qKeep = null;
+  const qKeeper = () => {   // a hidden text box: holding focus on it keeps the phone's keyboard open
+    if (qKeep && qKeep.isConnected) return qKeep;
+    qKeep = document.createElement('input'); qKeep.type = 'text'; qKeep.tabIndex = -1; qKeep.setAttribute('aria-hidden', 'true'); qKeep.autocomplete = 'off';
+    qKeep.style.cssText = 'position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;font-size:16px;border:0;padding:0;pointer-events:none';
+    document.body.appendChild(qKeep); return qKeep;
+  };
   function keepTyping(view, html) {   // the search box being typed in stays the same element: the phone's keyboard stays open
     const a = document.activeElement; if (!a || a.id !== 'q' || !view.contains(a)) return false;
     const tpl = document.createElement('div'); tpl.innerHTML = html;
@@ -16621,7 +16628,10 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
     document.body.dataset.page = key;
     const page = ROUTE_PERM[key] && !can(ROUTE_PERM[key]) ? denied() : pages[key](r.params);
     let fresh;
+    let qSel = null;
     if (lastRoute === key && keepTyping(view, page.html)) fresh = view;
+    else if ((() => { const a = document.activeElement; if (lastRoute !== key || !a || a.id !== 'q' || !view.contains(a)) return false;
+      qSel = [a.selectionStart, a.selectionEnd]; qKeeper().focus({ preventScroll: true }); return false; })()) fresh = view;   // the phone: the keyboard waits on a hidden box while the page is drawn again
     else if (page.keep && lastRoute === key && view._keep === page.keep && keepInPlace(view, page.html)) fresh = view;   // same product grid: it stays, the rest is new
     else { fresh = view.cloneNode(false); view.replaceWith(fresh); fresh.innerHTML = page.html; }   // a new element drops the old listeners
     fresh._keep = page.keep;
@@ -16630,6 +16640,7 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
     fresh.addEventListener = function (t, f, o) { return EventTarget.prototype.addEventListener.call(this, t, f, Object.assign(o && typeof o === 'object' ? Object.assign({}, o) : { capture: !!o }, { signal: ac.signal })); };
     if (page.mount) page.mount(fresh);
     if (window.__tbPhone) try { window.__tbPhone(); } catch (e) { console.error(e); }   // the phone's shape before the first frame: no flash of the computer's toolbar
+    if (qSel) { const nq = $('#q', fresh); if (nq) { nq.focus({ preventScroll: true }); try { nq.setSelectionRange(qSel[0], qSel[1]); } catch (e) { /* not a text box */ } } else qKeeper().blur(); }
     bindAutoMore(fresh);   // long lists of cards grow by themselves near their end
     saveCart();
     refreshBell(false, key !== 'notifications');

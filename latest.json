@@ -1,12 +1,12 @@
 {
  "app": "ToolBox",
- "build": "202611221830",
- "sha256": "414aaf870af323d2653838384275378643ce0c6de525625a3a891b81139ec823",
- "size": 2893369,
+ "build": "202611221840",
+ "sha256": "ad18070649a9b3071251b6f8d8bc8f17ca959eaf81825f618633eb7c287289f5",
+ "size": 2894459,
  "notes": "ژمارەی وەشان لە موبایل، کیبۆرد لە سێرچ، دۆلاری ١٠٠ لە باقی",
- "file": "ToolBox-202611221830.html",
- "at": "2026-11-22T18:30:14.147Z",
- "sig": "kIlyec//ZXIsUMXJQeugKmkVqBChQdETVUhqjdaMT5Ggo5hI4cE2+ZGhAIzyjDST7qnIvgIWEx+0RbFJDeyhRw==",
+ "file": "ToolBox-202611221840.html",
+ "at": "2026-11-22T18:36:27.459Z",
+ "sig": "hVVoSEP6erqk5kYOKkaqvzlV965hg7izdwcdm1+PQAL+vcPS2Snwo1aDSZbBLviejvbpzJ06ARWC//Rpv5Yrag==",
  "shell": {
   "build": "202611162205",
   "file": "ToolBox-shell-202611162205.json",
