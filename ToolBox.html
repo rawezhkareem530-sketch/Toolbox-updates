@@ -2,7 +2,7 @@
 <html lang="ckb" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="tb-build" content="202611162245">
+<meta name="tb-build" content="202611221830">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#F4F4F6">
 <title>ToolBox</title>
@@ -5558,6 +5558,7 @@ const Core = (() => {
     if (s.payStart !== undefined) { if (s.payStart !== 'cash' && s.payStart !== 'none' && !METHODS.includes(s.payStart)) fail('badNumber', 'payStart'); next.payStart = s.payStart; } pick('debtCur', ['IQD', 'USD']); pick('purCur', ['IQD', 'USD']); pick('retPick', ['choose', 'same']);
     if (s.fibOnClose !== undefined) next.fibOnClose = !!s.fibOnClose;
     if (s.setupDone !== undefined) next.setupDone = !!s.setupDone;
+    if (s.appVer !== undefined) next.appVer = String(s.appVer).slice(0, 20);   // the computer's app version: the phones show the same number
     if (s.perms !== undefined) {   // what the manager and the cashier may do (the admin may do everything)
       const P = {}; ['manager', 'cashier'].forEach(r => { const a = s.perms && s.perms[r]; if (!Array.isArray(a)) fail('badNumber', 'perms'); P[r] = [...new Set(a.map(String).filter(x => /^[a-zA-Z]{2,20}$/.test(x)))]; });
       next.perms = P;
@@ -9481,7 +9482,7 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
           $('[data-change-row] .l', m.el).textContent = change < 0 ? _t('کەمە') : _t('باقی بۆ کڕیار');
           $('[data-change]', m.el).innerHTML = money(Math.abs(change));
           if (quickFor !== cashPart) { quickFor = cashPart;
-            const R = C.rate(), usdNotes = c2On() && MC() === 'IQD' && R > 0 && cashPart > 0 && pb && pb.method() !== 'mixed' ? [10, 20, 50, 100].filter(n => n * R >= cashPart).slice(0, 3) : [];
+            const R = C.rate(), usdNotes = c2On() && MC() === 'IQD' && R > 0 && cashPart > 0 && pb && pb.method() !== 'mixed' ? [10, 20, 50, 100].filter(n => n * R >= cashPart) : [];
             $('[data-coquick]', m.el).innerHTML = cashPart > 0 ? quick(cashPart).slice(0, usdNotes.length ? 5 : 6).map((v, k) => `<button type="button" class="qchip" data-give="${v}">${k === 0 ? _t('ڕێک ') : ''}<span class="num">${fmt(v)}</span></button>`).join('')
               + usdNotes.map(n => `<button type="button" class="qchip usd" data-give-usd="${n}" title="${_t('کڕیار')} ${n} ${_t('دۆلار دەدات · باقی بە دینار')}"><span class="num ltr">$${n}</span></button>`).join('') : ''; }
           $$('[data-give]', m.el).forEach(b => b.classList.toggle('on', Number(b.dataset.give) === given));
@@ -10134,7 +10135,7 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
     $$('[data-filter]', root).forEach(s => s.addEventListener('change', () => { const np = new URLSearchParams(params); if (s.value) np.set(s.dataset.filter, s.value); else np.delete(s.dataset.filter); if (s.dataset.filter === 'p') { np.delete('from'); np.delete('to'); } go(np); }));
     const q = $('#q', root);
     if (q) {
-      let tm; q.addEventListener('input', () => { clearTimeout(tm); tm = setTimeout(() => { const np = new URLSearchParams(params); if (q.value.trim()) np.set('q', q.value.trim()); else np.delete('q'); navigate('/' + route().name + (np.toString() ? '?' + np : ''), true); }, 250); });
+      let tm; q.oninput = () => { clearTimeout(tm); tm = setTimeout(() => { const np = new URLSearchParams(params); if (q.value.trim()) np.set('q', q.value.trim()); else np.delete('q'); navigate('/' + route().name + (np.toString() ? '?' + np : ''), true); }, 250); };
       if (params.get('q')) { q.focus(); q.setSelectionRange(q.value.length, q.value.length); }
     }
   }
@@ -11270,6 +11271,10 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
 
   const UPD_REPO = 'rawezhkareem530-sketch/Toolbox-updates';   // "user/repo" on GitHub
   const UPD_PUB = 'MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEeHVDwMDfNIma1eSXkUM1Dhg/JZQ69kFAZS9fRgH4oohjhL5MCPqrXPx9XhrJfaUqykPRe4AwDDH7UjyJQVhCfw==';
+  setTimeout(() => {   // the computer writes its version into the shared settings, so every phone shows the same number
+    const H = window.ToolBoxHost; if (!H || !H.full) return;
+    H.full.info().then(fi => { if (fi && fi.version && C.db.settings.appVer !== fi.version) C.updateSettings({ appVer: fi.version }); }).catch(() => { /* an older Windows part */ });
+  }, 6000);
   const AppUpdate = (() => {
     const U = window.ToolBoxHost && window.ToolBoxHost.update;
     const when = b => b && /^\d{12}$/.test(b) && b !== '000000000000' ? new Date(Date.UTC(+b.slice(0, 4), +b.slice(4, 6) - 1, +b.slice(6, 8), +b.slice(8, 10), +b.slice(10, 12))).toISOString() : null;
@@ -15106,7 +15111,7 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
             </tbody></table></div>` : W('', `<div class="sr-txt muted">${_t('هێشتا هیچ پاشەکەوتێک لەم ئامێرەدا نییە.')}</div>`), '', _t('هەر پاشەکەوتێک دوای دروستکردنی خۆکار دەپشکنرێت.'))}
         ${G(_t('پشکنینی فایل'), R(_t('فایلێکی پاشەکەوت بپشکنە'), `<label class="btn ghost sm">${ic('check')}${_t('هەڵبژاردنی فایل')}<input type="file" accept="application/json,.json" data-bk-check hidden></label>`, _t('دەزانیت تەواوە و چی تێدایە؛ هیچ شتێک ناگۆڕدرێت.')))}`, bkOld ? 'warn' : '')}
       ${sec('data', 'layers', _t('داتا'), `
-        ${G(_t('دەربارە'), R(`<span class="set-about">${LOGO}ToolBox</span>`, `<span class="muted">${_t('وەشانی')} <span class="num" data-app-ver>${APP_VERSION}</span></span>`, `${_t('هەموو داتاکە لەسەر ئەم کۆمپیوتەرە هەڵدەگیرێت.')} ✓ ${_t('ئەم وەشانە بە ئۆنلاین هات.')}`) + '<div data-upd></div>')}
+        ${G(_t('دەربارە'), R(`<span class="set-about">${LOGO}ToolBox</span>`, `<span class="muted">${_t('وەشانی')} <span class="num" data-app-ver>${esc(C.db.settings.appVer || APP_VERSION)}</span></span>`, `${_t('هەموو داتاکە لەسەر ئەم کۆمپیوتەرە هەڵدەگیرێت.')} ✓ ${_t('ئەم وەشانە بە ئۆنلاین هات.')}`) + '<div data-upd></div>')}
         ${G(_t('تەندروستی داتا'), '<div class="sr"><span class="muted">…</span></div>', 'data-health')}
         ${archGroup()}
         ${ctx.user.role === 'admin' ? G(_t('سڕینەوە'), R(_t('سڕینەوەی هەموو داتا'), `<button class="btn ghost sm danger-t" data-wipe ${C.hasRecords() ? '' : 'disabled'}>${ic('trash')}${_t('سڕینەوە')}</button>${Restore.hasUndo && Restore.undoKind === 'wipe' ? `<button type="button" class="btn ghost sm" data-restore-undo>${ic('undo')}${_t('گەڕانەوە')}</button>` : ''}`, _t('کاڵا، فرۆشتن، کڕیار، دابینکەر، خەرجی و شیفتەکان. ڕێکخستن و بەکارهێنەران دەمێننەوە. پێشتر کۆپییەک هەڵدەگیرێت.'))) : ''}`)}
@@ -15381,7 +15386,8 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
         { const box = $('[data-upd]', root), H = window.ToolBoxHost;
           if (box && H && H.shell) Promise.all([H.shell.info(), H.full ? H.full.info().catch(() => null) : null]).then(([si, fi]) => {
             if (!si || !box.isConnected) return;
-            const av = $('[data-app-ver]', root); if (av && fi && fi.version) av.textContent = fi.version;   // the installed app's own version (1.0.2…)
+            const av = $('[data-app-ver]', root); if (av && fi && fi.version) av.textContent = fi.version;
+            if (fi && fi.version && C.db.settings.appVer !== fi.version) try { C.updateSettings({ appVer: fi.version }); } catch (e) { /* shown anyway */ }   // the installed app's own version (1.0.2…)
             const b = String(si.build || ''), d = /^\d{12}$/.test(b) ? new Date(Date.UTC(+b.slice(0, 4), +b.slice(4, 6) - 1, +b.slice(6, 8), +b.slice(8, 10), +b.slice(10, 12))) : null;
             box.insertAdjacentHTML('afterend', `<div class="sr"><div class="sr-l"><span class="fl">${_t('بەشی ویندۆز')}</span><small class="sr-h">${si.using === 'update' ? _t('نوێکراوە لە ئینتەرنێتەوە') : _t('هەمان ئەوەی لەگەڵ دامەزراندن هات')}${si.failed ? ` · ${_t('وەشانێک نەکرایەوە و گەڕایەوە بۆ پێشوو')}` : ''}</small></div><div class="sr-c"><span class="muted">${d ? fDT(d.toISOString()) : '—'}</span></div></div>`);
           }).catch(() => { /* an older Windows part */ }); }
@@ -16590,6 +16596,23 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
     swap(view, oldLay, tpl, newLay);
     return true;
   }
+  function keepTyping(view, html) {   // the search box being typed in stays the same element: the phone's keyboard stays open
+    const a = document.activeElement; if (!a || a.id !== 'q' || !view.contains(a)) return false;
+    const tpl = document.createElement('div'); tpl.innerHTML = html;
+    const nq = tpl.querySelector('#q'); if (!nq) return false;
+    const oc = [], nc = [];
+    for (let o = a; o && o !== view; o = o.parentElement) oc.push(o);
+    for (let n = nq; n && n !== tpl; n = n.parentElement) nc.push(n);
+    if (oc.length !== nc.length || oc.some((o, i) => o.tagName !== nc[i].tagName)) return false;
+    const sync = (o, n) => { [...o.attributes].forEach(x => { if (x.name !== 'style' && x.name !== 'value' && !n.hasAttribute(x.name)) o.removeAttribute(x.name); }); [...n.attributes].forEach(x => { if (x.name !== 'value' && o.getAttribute(x.name) !== x.value) o.setAttribute(x.name, x.value); }); };
+    const swap = (ob, ko, nb, kn) => {
+      [...ob.childNodes].forEach(x => { if (x !== ko) x.remove(); });
+      let before = true; [...nb.childNodes].forEach(x => { if (x === kn) { before = false; return; } if (before) ob.insertBefore(x, ko); else ob.appendChild(x); });
+    };
+    for (let i = 1; i < oc.length; i++) { sync(oc[i], nc[i]); swap(oc[i], oc[i - 1], nc[i], nc[i - 1]); }
+    swap(view, oc[oc.length - 1], tpl, nc[nc.length - 1]);
+    return true;
+  }
   function renderNow() {
     if (!ctx.user) return;
     const view = $('#view'); if (!view) return;
@@ -16598,7 +16621,8 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
     document.body.dataset.page = key;
     const page = ROUTE_PERM[key] && !can(ROUTE_PERM[key]) ? denied() : pages[key](r.params);
     let fresh;
-    if (page.keep && lastRoute === key && view._keep === page.keep && keepInPlace(view, page.html)) fresh = view;   // same product grid: it stays, the rest is new
+    if (lastRoute === key && keepTyping(view, page.html)) fresh = view;
+    else if (page.keep && lastRoute === key && view._keep === page.keep && keepInPlace(view, page.html)) fresh = view;   // same product grid: it stays, the rest is new
     else { fresh = view.cloneNode(false); view.replaceWith(fresh); fresh.innerHTML = page.html; }   // a new element drops the old listeners
     fresh._keep = page.keep;
     if (fresh._abort) fresh._abort.abort();
