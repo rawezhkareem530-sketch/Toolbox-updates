@@ -2,7 +2,7 @@
 <html lang="ckb" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="tb-build" content="202611222000">
+<meta name="tb-build" content="202611222015">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#F4F4F6">
 <title>ToolBox</title>
@@ -1039,6 +1039,9 @@ tr.row-dim td .num,tr.row-dim td{opacity:.85}
 
 .tb-date{display:none}
 .tb-home{display:none}
+.pb-head-hide{display:none!important}
+.apps-ui #view>.page-head>div:first-child:has(>h1){display:none}
+.pb-search>.pb-acts{display:flex!important;align-items:center;gap:8px;flex:none}
 .pb-search>.view-tog{margin:0!important;height:40px;display:inline-flex;align-items:center}
 @media (min-width:641px){ .pb-search>.search{flex:0 1 420px!important} .pb-search>.search input.f{height:38px!important;font-size:14px!important} .pb-filter{height:38px} .pb-search>.view-tog{height:38px;margin-inline-start:auto!important} }
 #view .note:not([data-abk-note]):not([data-nostore]):not([data-storebroken]):not(.card .note):not(.modal .note):not(form .note),.rate-remind,.lq-note{display:none!important}
@@ -16995,26 +16998,28 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
       const acts = document.createElement('div'); acts.className = 'pb-acts';
       if (more.length) { const mb = document.createElement('button'); mb.type = 'button'; mb.className = 'pb-ic'; mb.setAttribute('aria-label', _t('زیاتر')); mb.innerHTML = ic('dots'); mb.addEventListener('click', () => pbMenu(mb, more)); acts.appendChild(mb); }
       if (primary) { primary.classList.add('pb-plus'); primary.setAttribute('aria-label', primary.textContent.trim()); acts.appendChild(primary); }
-      if (acts.children.length) head.appendChild(acts);
+      void head;
       const row = document.createElement('div'); row.className = 'pb-search';
       if (search) row.appendChild(search); else { const sp = document.createElement('div'); sp.className = 'pb-sp'; row.appendChild(sp); }
       if (cam) row.appendChild(cam);
       if (vt) row.appendChild(vt);
+      const addActs = () => { if (acts.children.length) row.appendChild(acts); };   // ⋯ and + on the same line as the search
       if (rest.length) {
         const fb = document.createElement('button'); fb.type = 'button'; fb.className = 'pb-filter'; const n = rest.filter(pbActive).length;
         fb.innerHTML = `${ic('filter')}<span>${_t('فلتەر')}</span>${n ? `<b class="num">${n}</b>` : ''}`; fb.classList.toggle('on', !!n); fb.addEventListener('click', pbOpenSheet); row.appendChild(fb);
       }
+      addActs();
       let chipEl = null;
       if (chips) { chips.classList.add('pb-chips'); chipEl = chips; }
       else if (perChips) { chipEl = pbChipsOf(perChips); pbHide(perChips); }
-      if (search || vt) { pb.appendChild(row); if (chipEl) pb.appendChild(chipEl); }
+      if (search || vt || acts.children.length) { pb.appendChild(row); if (chipEl) pb.appendChild(chipEl); }
       else if (chipEl && rest.length) { const fr = row.querySelector('.pb-filter'); const r2 = document.createElement('div'); r2.className = 'pb-chiprow'; r2.appendChild(chipEl); r2.appendChild(fr); pb.appendChild(r2); }   // no search: the chips with «فلتەر» at their end, one row
       else if (chipEl) pb.appendChild(chipEl);
       else if (rest.length) pb.appendChild(row);
       if (dates) { dates.classList.add('pb-dates'); pb.appendChild(dates); const ap = bars.map(b => b.querySelector(':scope > [data-apply]')).find(Boolean); if (ap) dates.appendChild(ap); }
       rest.forEach(e => { e.classList.add('pb-rest'); pbHide(e); });
       more.forEach(pbHide);
-      head.after(pb);
+      head.after(pb); head.classList.add('pb-head-hide');   // the section's name is already in the bar at the top
       bars.forEach(b => { if (![...b.children].some(c => !c.classList.contains('pb-gone'))) b.classList.add('pb-gone'); });
       const on = pb.querySelector('.pb-chips .on'); if (on) try { on.scrollIntoView({ inline: 'center', block: 'nearest' }); } catch (e) { /* old browser */ }
       pbFade(pb.querySelector('.pb-chips'));
