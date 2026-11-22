@@ -2,7 +2,7 @@
 <html lang="ckb" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="tb-build" content="202611221945">
+<meta name="tb-build" content="202611222000">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#F4F4F6">
 <title>ToolBox</title>
@@ -1041,7 +1041,7 @@ tr.row-dim td .num,tr.row-dim td{opacity:.85}
 .tb-home{display:none}
 .pb-search>.view-tog{margin:0!important;height:40px;display:inline-flex;align-items:center}
 @media (min-width:641px){ .pb-search>.search{flex:0 1 420px!important} .pb-search>.search input.f{height:38px!important;font-size:14px!important} .pb-filter{height:38px} .pb-search>.view-tog{height:38px;margin-inline-start:auto!important} }
-#view>.note.warn:not([data-abk-note]):not([data-nostore]),.rate-remind{display:none!important}
+#view .note:not([data-abk-note]):not([data-nostore]):not([data-storebroken]):not(.card .note):not(.modal .note):not(form .note),.rate-remind,.lq-note{display:none!important}
 .tb-user{width:34px;height:34px;border-radius:50%;border:none;padding:0;cursor:pointer;color:#fff;font-weight:700;font-size:13px;display:grid;place-items:center;flex:none}
 .um-head{display:flex;align-items:center;gap:10px;padding:8px 10px 10px;border-bottom:1px solid var(--line);margin-bottom:4px}
 .um-head .avatar{width:38px;height:38px;font-size:14px}.um-head b{display:block;font-size:14px}.um-head small{color:var(--muted);font-size:12px}
@@ -7136,6 +7136,10 @@ const Core = (() => {
     if (below.length) add({ key: 'price-below-cost', cat: 'stock', level: 'warning', perm: 'cost', title: _tf('{0} کاڵا نرخی فرۆشتنی لە نرخی کڕین کەمترە', below.length),
       text: nameList(below), items: below.slice(0, 100).map(p => ({ label: p.name, sub: `${fm(sellPrice(p, p.unit))} < ${fm(p.cost)}`, route: `#/products?id=${p.id}` })), sig: sigOf(below), route: '#/products' });
 
+    const lq = labelQueue();
+    if (lq.length) add({ key: 'labels', cat: 'stock', level: 'info', perm: 'products', title: _tf('{0} کاڵا لەیبڵی ڕەفیان نوێ نەکراوەتەوە', lq.length),
+      text: _t('نرخیان گۆڕاوە یان نوێن'), items: lq.slice(0, 100).map(p => ({ label: p.name, route: `#/products?id=${p.id}` })),
+      sig: lq.map(p => p.id + ':' + p.priceAt).join(','), route: '#/products?labels=1', actions: [{ label: _t('چاپی لەیبڵەکان'), route: '#/products?labels=1', perm: 'products' }] });
     const rp = repriceList();
     if (rp.length) add({ key: 'reprice', cat: 'stock', level: 'warning', perm: 'cost', title: _tf('{0} کاڵا بە دۆلاری ئەمڕۆ قازانجیان کەم بووەتەوە', rp.length),
       text: _t('نرخی دۆلار بەرزبووەتەوە؛ نرخی فرۆشتنیان پێویستی بە نوێکردنەوە هەیە'), items: rp.slice(0, 100).map(p => { const u = usdCheck(p); return { label: p.name, sub: _tf('قازانج {0} ← {1}', fm(u.pThen === null ? 0 : u.pThen), fm(u.pToday)), route: `#/products?f=reprice` }; }),
@@ -10764,6 +10768,7 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
           if (it) { const id = Number(it.dataset.p); if (ctx.psel.has(id)) ctx.psel.delete(id); else ctx.psel.add(id); $$(`[data-p="${id}"]`, root).forEach(x => x.classList.toggle('sel', ctx.psel.has(id))); selCount(); e.stopImmediatePropagation(); }
         }, true);
         bindListControls(root, params);
+        if (params.get('labels') && manage) setTimeout(() => { const np = new URLSearchParams(params); np.delete('labels'); setPath('/products' + (np.toString() ? '?' + np : ''), true); labelsForm(C.labelQueue()); }, 60);   // from the notification
         root.addEventListener('click', e => {
           const pv = e.target.closest('[data-pview]'); if (pv) { try { localStorage.setItem('tbpos_pview', pv.dataset.pview); } catch (er) { /* per-device only */ } render(); return; }
           const pc = e.target.closest('[data-pcat]'); if (pc) { const np = new URLSearchParams(params); if (pc.dataset.pcat) np.set('c', pc.dataset.pcat); else np.delete('c'); go(np); return; }
