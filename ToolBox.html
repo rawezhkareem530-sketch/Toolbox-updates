@@ -2,7 +2,7 @@
 <html lang="ckb" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="tb-build" content="202611222215">
+<meta name="tb-build" content="202611222225">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#F4F4F6">
 <title>ToolBox</title>
@@ -1049,7 +1049,7 @@ tr.row-dim td .num,tr.row-dim td{opacity:.85}
 .cc-dot{position:absolute;top:-3px;inset-inline-end:-3px;width:8px;height:8px;border-radius:50%;background:#34C759;box-shadow:0 0 0 2px var(--card)}
 .cc-dot.bad{background:#FF3B30}
 .cc-pop{position:fixed;z-index:80;width:330px;max-width:calc(100vw - 16px);background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:0 16px 48px rgba(0,0,0,.18);padding:10px;display:flex;flex-direction:column;gap:7px}
-.cc-head{display:flex;align-items:center;gap:8px;padding:2px 4px 6px}
+.cc-head{display:none;align-items:center;gap:8px;padding:2px 4px 6px}.cc-ttl{flex:1;font-size:17px}
 .cc-clock{flex:1;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}.cc-clock>b{font-size:20px;font-weight:700}.cc-clock>span{color:var(--muted);font-size:12.5px}
 .cc-x{display:none;width:32px;height:32px;border-radius:50%;border:none;background:var(--key);color:var(--ink);place-items:center;cursor:pointer}
 .cc-grid{display:grid;gap:7px}
@@ -1065,7 +1065,8 @@ tr.row-dim td .num,tr.row-dim td{opacity:.85}
 .cc-row .btn.sm{min-width:64px}
 .cc-seg{display:flex;gap:2px;background:var(--key);border-radius:9px;padding:2px}
 [data-cc-devs]:empty{display:none}
-.cc-dl{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}
+.cc-devs{min-height:40px;padding:6px 10px}.cc-devs>svg{color:var(--muted)}
+.cc-dl,.cc-row>span.cc-dl{display:flex;flex-direction:row;flex-wrap:wrap;gap:5px;flex:1;margin:0}
 .cc-dl i{font-style:normal;font-size:11.5px;padding:2px 8px 2px 8px;border-radius:10px;background:var(--key);color:var(--muted);display:inline-flex;align-items:center;gap:5px}
 .cc-dl i::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--faint)}
 .cc-dl i.on{color:var(--ink)}.cc-dl i.on::before{background:#34C759}
@@ -1073,7 +1074,7 @@ tr.row-dim td .num,tr.row-dim td{opacity:.85}
 .cc-seg button.on{background:var(--card);box-shadow:0 1px 2px rgba(0,0,0,.12)}
 @media (max-width:640px){
   .cc-pop{inset:0!important;width:auto;max-width:none;height:100dvh;border-radius:0;border:none;box-shadow:none;padding:calc(12px + env(safe-area-inset-top)) 14px calc(14px + env(safe-area-inset-bottom));gap:10px;overflow-y:auto}
-  .cc-x{display:grid}
+  .cc-x{display:grid}.cc-head{display:flex}
   .cc-clock>b{font-size:26px}
   .cc-t{min-height:88px}.cc-t b{font-size:13px}
   .cc-row{min-height:56px}
@@ -16520,11 +16521,10 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
     let clk = 0;
     const close = () => { clearInterval(clk); pop.remove(); document.removeEventListener('click', off, true); document.removeEventListener('keydown', off, true); };
     const off = ev => { if (ev.type === 'keydown' && ev.key !== 'Escape') return; if (ev.type === 'click' && (pop.contains(ev.target) || btn.contains(ev.target))) return; close(); };
-    const devsHTML = () => {   // the computer: which phones are connected right now
+    const devsHTML = () => {   // the computer: which phones are connected right now, on one line
       const all = SyncHub.devices().sort((a, b) => a.n - b.n); if (!all.length) return '';
-      const live = x => !!x.last && Date.now() - x.last < 45000, n = all.filter(live).length;
-      return `<div class="cc-row cc-devs ${n ? 'ok' : ''}">${ic('devices')}<span><b>${_t('ئامێرە پەیوەستەکان')}</b><small>${_tf('{0} لە {1} پەیوەستن', n, all.length)}</small>
-        <span class="cc-dl">${all.map(x => `<i class="${live(x) ? 'on' : ''}">${esc(x.name || ('#' + x.n))}</i>`).join('')}</span></span></div>`;
+      const live = x => !!x.last && Date.now() - x.last < 45000;
+      return `<div class="cc-row cc-devs" title="${_t('ئامێرە پەیوەستەکان')}">${ic('devices')}<span class="cc-dl">${all.map(x => `<i class="${live(x) ? 'on' : ''}">${esc(x.name || ('#' + x.n))}</i>`).join('')}</span></div>`;
     };
     const clockHTML = () => { const d = new Date(); return `<b class="num">${fTime(d)}</b><span>${KU_DAYS[d.getDay()]} <span class="num">${fDate(d)}</span></span>`; };
     const draw = () => {
@@ -16539,19 +16539,16 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
       const cols = tiles.length === 4 ? 2 : 3;
       const shTxt = sh ? (stale ? _t('شیفتی ڕۆژێکی تر هێشتا کراوەیە') : `${_t('کراوەیە لە')} <span class="num">${fTime(sh.openedAt)}</span>`) : _t('شیفت داخراوە');
       const sync = PhoneSync.linked ? (PhoneSync.state === 'off' ? _t('پەیوەندی بە کۆمپیوتەرەوە نییە') : PhoneSync.state === 'busy' ? _t('یەکدەخرێت…') : _t('یەکگرتووە')) : '';
-      pop.innerHTML = `<div class="cc-head"><div class="cc-clock" data-cc-clock>${clockHTML()}</div><button type="button" class="cc-x" data-cc-x aria-label="${_t('داخستن')}">${ic('x')}</button></div>
+      pop.innerHTML = `<div class="cc-head"><b class="cc-ttl">${_t('کۆنترۆڵ سەنتەر')}</b><button type="button" class="cc-x" data-cc-x aria-label="${_t('داخستن')}">${ic('x')}</button></div>
         ${can('shifts') ? `<div class="cc-row ${!sh || stale ? 'bad' : 'ok'}">${ic('clock')}<span><b>${_t('شیفت')}</b><small>${shTxt}</small></span><button type="button" class="btn ghost sm" data-cc-shift="${sh ? 'close' : 'open'}">${sh ? _t('داخستن') : _t('کردنەوە')}</button></div>` : ''}
         <div data-cc-devs>${devsHTML()}</div>
         ${sync ? `<div class="cc-row ${PhoneSync.state === 'off' ? 'bad' : 'ok'}">${ic('devices')}<span><b>${_t('یەکگرتنەوە')}</b><small>${sync}</small></span><button type="button" class="btn ghost sm" data-cc-sync>${_t('ئێستا')}</button></div>` : ''}
-        <div class="cc-grid" style="grid-template-columns:repeat(${cols},1fr)">${tiles.map(([k, icn, label, on]) => `<button type="button" class="cc-t ${on ? 'on' : ''}" data-cct="${k}" aria-pressed="${on ? 'true' : 'false'}">${ic(icn)}<b>${label}</b></button>`).join('')}</div>
-        <div class="cc-row"><span class="cc-aa">Aa</span><span><b>${_t('قەبارەی نووسین')}</b></span><div class="cc-seg">${[['n', 'A'], ['l', 'A+'], ['xl', 'A++']].map(([k, l]) => `<button type="button" data-cc-size="${k}" class="${L.size === k ? 'on' : ''}">${l}</button>`).join('')}</div></div>
-        <div class="cc-row">${ic('globe')}<span><b>${_t('زمان')}</b></span><div class="cc-seg">${LANGS.map(([k, l]) => `<button type="button" data-cc-lang="${k}" class="${I18N.prefs.lang === k ? 'on' : ''}">${l}</button>`).join('')}</div></div>
-        ${can('backup') || can('settings') ? `<div class="cc-row">${ic('download')}<span><b>${_t('پاشەکەوت')}</b><small>${S.lastBackupAt ? `${_t('دوایین:')} ${timeAgo(new Date(S.lastBackupAt).getTime())}` : _t('هێشتا نەکراوە')}</small></span><button type="button" class="btn ghost sm" data-cc-bk>${_t('ئێستا')}</button></div>` : ''}`;
+        <div class="cc-grid" style="grid-template-columns:repeat(${cols},1fr)">${tiles.map(([k, icn, label, on]) => `<button type="button" class="cc-t ${on ? 'on' : ''}" data-cct="${k}" aria-pressed="${on ? 'true' : 'false'}">${ic(icn)}<b>${label}</b></button>`).join('')}</div>`;
     };
     const place = () => { if (phone) return; const r = btn.getBoundingClientRect(); pop.style.top = Math.round(r.bottom + 8) + 'px'; pop.style.left = Math.round(Math.max(8, Math.min(innerWidth - pop.offsetWidth - 8, r.left + r.width / 2 - pop.offsetWidth / 2))) + 'px'; };
     const redraw = () => { draw(); place(); };
     draw(); document.body.appendChild(pop); place();
-    clk = setInterval(() => { const c = $('[data-cc-clock]', pop); if (c) c.innerHTML = clockHTML(); const dv = $('[data-cc-devs]', pop); if (dv) dv.innerHTML = devsHTML(); if (!pop.isConnected) clearInterval(clk); }, 5000);
+    clk = setInterval(() => { const dv = $('[data-cc-devs]', pop); if (dv) dv.innerHTML = devsHTML(); if (!pop.isConnected) clearInterval(clk); }, 5000);
     pop.addEventListener('click', e => {
       if (e.target.closest('[data-cc-x]')) { close(); return; }
       const t = e.target.closest('[data-cct]');
