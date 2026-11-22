@@ -2,7 +2,7 @@
 <html lang="ckb" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="tb-build" content="202611221930">
+<meta name="tb-build" content="202611221945">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#F4F4F6">
 <title>ToolBox</title>
@@ -1039,6 +1039,14 @@ tr.row-dim td .num,tr.row-dim td{opacity:.85}
 
 .tb-date{display:none}
 .tb-home{display:none}
+.pb-search>.view-tog{margin:0!important;height:40px;display:inline-flex;align-items:center}
+@media (min-width:641px){ .pb-search>.search{flex:0 1 420px!important} .pb-search>.search input.f{height:38px!important;font-size:14px!important} .pb-filter{height:38px} .pb-search>.view-tog{height:38px;margin-inline-start:auto!important} }
+#view>.note.warn:not([data-abk-note]):not([data-nostore]),.rate-remind{display:none!important}
+.tb-user{width:34px;height:34px;border-radius:50%;border:none;padding:0;cursor:pointer;color:#fff;font-weight:700;font-size:13px;display:grid;place-items:center;flex:none}
+.um-head{display:flex;align-items:center;gap:10px;padding:8px 10px 10px;border-bottom:1px solid var(--line);margin-bottom:4px}
+.um-head .avatar{width:38px;height:38px;font-size:14px}.um-head b{display:block;font-size:14px}.um-head small{color:var(--muted);font-size:12px}
+.pb-menu>button.um-out,.pb-menu>button.um-out svg{color:var(--danger)}
+.ah-hello{font-size:22px;font-weight:700;margin:4px 0 20px}
 .apps-ui .shell>.side,.apps-ui .shell>.scrim{display:none}
 .apps-ui .topbar [data-menu]{display:none}
 .apps-ui .tb-home{display:grid}
@@ -16419,10 +16427,8 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
   pages.apps = () => {
     const u = ctx.user;
     return { title: _t('هەموو بەشەکان'), html: `<div class="apps-home">
-      <div class="ah-user"><div class="avatar" style="background:${Login.colorFor(u)}">${esc(Login.initials(u.name))}</div><div class="ah-hi"><b>${esc(u.name)}</b><small>${ROLES[u.role]}</small></div>
-        <button type="button" class="btn ghost sm" data-ah-pin>${ic('key')}${_t('گۆڕینی کۆدی نهێنی')}</button><button type="button" class="btn ghost sm" data-ah-out>${ic('logout')}${_t('چوونەدەرەوە')}</button></div>
-      <div class="ah-grid">${appTiles('')}</div></div>`,
-      mount(root) { $('[data-ah-pin]', root).onclick = () => $('[data-mypin]').click(); $('[data-ah-out]', root).onclick = () => $('[data-logout]').click(); } };
+      <div class="ah-hello">${_t('بەخێربێیت')}، ${esc(u.name.split(' ')[0])}</div>
+      <div class="ah-grid">${appTiles('')}</div></div>` };
   };
   const ROUTE_PERM = { stock: 'products', activity: 'users', sale: 'sell', sales: 'sell', shifts: 'shifts', customers: 'customers', suppliers: 'suppliers', purchases: 'purchases', expenses: 'expenses', reports: 'reports', settings: 'settings', users: 'users' };
   function route() {
@@ -16591,7 +16597,7 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
       <div class="scrim" data-scrim></div>
       <div class="main-col" data-page-scroll>
         <header class="topbar"><button class="icon-btn" data-menu aria-label="${_t('مێنیو')}">${ic('menu')}</button><a class="icon-btn tb-home" href="#/apps" data-nav="apps" title="${_t('هەموو بەشەکان')}" aria-label="${_t('هەموو بەشەکان')}">${ic('grid')}</a><div class="title" data-title data-apps-sw></div>
-          <button class="icon-btn tb-fs" data-fullscreen title="${_t('پڕبەشاشە (F11)')}" aria-label="${_t('پڕبەشاشە')}">${ic(document.fullscreenElement ? 'shrink' : 'expand')}</button><div class="tb-group"><button class="icon-btn tb-theme" data-theme-toggle title="${Look.isDark() ? _t('دۆخی ڕووناک') : _t('دۆخی تاریک')}" aria-label="${Look.isDark() ? _t('دۆخی ڕووناک') : _t('دۆخی تاریک')}">${ic(Look.isDark() ? 'sun' : 'moon')}</button><span class="sync-slot" data-sync-slot></span><span data-shift-slot></span><span data-rate-slot></span>${bellHTML()}</div>
+          <button class="icon-btn tb-fs" data-fullscreen title="${_t('پڕبەشاشە (F11)')}" aria-label="${_t('پڕبەشاشە')}">${ic(document.fullscreenElement ? 'shrink' : 'expand')}</button><div class="tb-group"><button class="icon-btn tb-theme" data-theme-toggle title="${Look.isDark() ? _t('دۆخی ڕووناک') : _t('دۆخی تاریک')}" aria-label="${Look.isDark() ? _t('دۆخی ڕووناک') : _t('دۆخی تاریک')}">${ic(Look.isDark() ? 'sun' : 'moon')}</button><span class="sync-slot" data-sync-slot></span><span data-shift-slot></span><span data-rate-slot></span>${bellHTML()}<button type="button" class="tb-user" data-user-menu style="background:${Login.colorFor(u)}" title="${esc(u.name)}" aria-label="${esc(u.name)}">${esc(Login.initials(u.name))}</button></div>
           <div class="tb-date" data-tb-date></div></header>
         <main class="main" id="view"></main>
       </div>
@@ -16607,6 +16613,17 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
     $('[data-scrim]').onclick = () => sh.classList.remove('menu');
     $('.side').addEventListener('click', e => { if (e.target.closest('a')) sh.classList.remove('menu'); });
     $('[data-mypin]').onclick = () => pinForm(Users.byId(ctx.user.id), true);
+    $('[data-user-menu]').onclick = e => {   // the account: who is signed in, the PIN, signing out
+      const btn = e.currentTarget, old = $('.pb-menu'); if (old) { old.remove(); if (old._for === btn) return; }
+      const mn = document.createElement('div'); mn.className = 'pb-menu'; mn._for = btn; mn.setAttribute('role', 'menu');
+      mn.innerHTML = `<div class="um-head"><div class="avatar" style="background:${Login.colorFor(u)}">${esc(Login.initials(u.name))}</div><div><b>${esc(u.name)}</b><small>${ROLES[u.role]}</small></div></div>
+        <button type="button" data-um-pin>${ic('key')}${_t('گۆڕینی کۆدی نهێنی')}</button><button type="button" class="um-out" data-um-out>${ic('logout')}${_t('چوونەدەرەوە')}</button>`;
+      document.body.appendChild(mn);
+      const r = btn.getBoundingClientRect(); mn.style.top = Math.round(r.bottom + 6) + 'px'; mn.style.left = Math.round(Math.max(8, Math.min(innerWidth - mn.offsetWidth - 8, r.left))) + 'px';
+      $('[data-um-pin]', mn).onclick = () => { mn.remove(); $('[data-mypin]').click(); };
+      $('[data-um-out]', mn).onclick = () => { mn.remove(); $('[data-logout]').click(); };
+      setTimeout(() => document.addEventListener('click', function off(ev) { if (!mn.contains(ev.target) && !btn.contains(ev.target)) { mn.remove(); document.removeEventListener('click', off, true); } }, true), 0);
+    };
     $('[data-apps-sw]').onclick = e => {   // the section's name opens the other sections
       if (!document.documentElement.classList.contains('apps-ui') || innerWidth < 900 || route().name === 'apps') return;
       const old = $('.apps-pop'); if (old) { old.remove(); return; }
@@ -16794,7 +16811,7 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
     if (!ctx.cart.length) { ctx.cart = loadCart(user.id); savedCart = JSON.stringify(ctx.cart); if (ctx.cart.length) setTimeout(() => toast(_tf('سەبەتەکەت گەڕایەوە · {0} کاڵا', ctx.cart.length)), 300); }
     if (!restored) C.logEvent('login', _tf('{0} چووە ژوورەوە', user.name), user.id);
     $('#login').classList.add('hidden'); $('#app').classList.remove('hidden');
-    setPath(can('sell') ? '/sale' : '/dashboard', true);   // the app always opens on the selling screen
+    setPath(Look.prefs.ui !== 'side' ? '/apps' : can('sell') ? '/sale' : '/dashboard', true);   // sections: the user picks one; side menu: the selling screen
     shell(); render();
     setTimeout(() => AutoBk.run(false), 4000);   // automatic backup when it is due
     if (Users.isDefaultPin(user)) setTimeout(() => pinForm(user, false, true), 300);   // the well-known 1234 must be changed before work starts
@@ -16898,8 +16915,10 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
           px.value = orig.value;
           px.addEventListener('change', () => { orig.value = px.value; orig.dispatchEvent(new Event('change', { bubbles: true })); });
         } else {
-          px = document.createElement('div'); px.className = 'seg pb-seg';
-          [...orig.querySelectorAll('button')].forEach((b, i) => { const c = document.createElement('button'); c.type = 'button'; c.className = b.classList.contains('on') ? 'on' : ''; c.innerHTML = b.innerHTML + (orig.matches('.view-tog') ? (i ? _t(' لیست') : _t(' کارت')) : ''); c.addEventListener('click', () => { const live = $$('#view .pb-rest')[[...$$('#view .pb-rest')].indexOf(orig)] || orig; const t = live.querySelectorAll('button')[i] || b; t.click(); setTimeout(pbFill, 60); }); px.appendChild(c); });
+          px = document.createElement('select'); px.className = 'f';   // the same drop-down for every filter
+          const bs = [...orig.querySelectorAll('button')];
+          bs.forEach((b, i) => { const o = document.createElement('option'); o.value = String(i); o.textContent = b.textContent.replace(/\s+/g, ' ').trim(); if (b.classList.contains('on')) o.selected = true; px.appendChild(o); });
+          px.addEventListener('change', () => { const live = $$('#view .pb-rest')[[...$$('#view .pb-rest')].indexOf(orig)] || orig; const t = live.querySelectorAll('button')[Number(px.value)]; if (t) t.click(); setTimeout(pbFill, 60); });
         }
         row.appendChild(px); box.appendChild(row);
       });
@@ -16964,7 +16983,8 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
       const per = sels.find(s => s.dataset.filter === 'p');
       let chips = segs.find(s => s.dataset.seg === 'tab') || null, perChips = null;   // real tabs stay in sight; every filter goes behind «فلتەر»
       void ppChips; void per;
-      const rest = [...sels, ...segs].filter(e => e !== chips && e !== perChips);
+      const vt = segs.find(x => x.matches('.view-tog')) || null;
+      const rest = [...sels, ...segs].filter(e => e !== chips && e !== perChips && e !== vt);
       const dates = bars.map(b => b.querySelector(':scope > .inrow')).find(x => x && x.querySelector('[data-from]'));
       const pb = document.createElement('div'); pb.className = 'pbar';
       const acts = document.createElement('div'); acts.className = 'pb-acts';
@@ -16974,6 +16994,7 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
       const row = document.createElement('div'); row.className = 'pb-search';
       if (search) row.appendChild(search); else { const sp = document.createElement('div'); sp.className = 'pb-sp'; row.appendChild(sp); }
       if (cam) row.appendChild(cam);
+      if (vt) row.appendChild(vt);
       if (rest.length) {
         const fb = document.createElement('button'); fb.type = 'button'; fb.className = 'pb-filter'; const n = rest.filter(pbActive).length;
         fb.innerHTML = `${ic('filter')}<span>${_t('فلتەر')}</span>${n ? `<b class="num">${n}</b>` : ''}`; fb.classList.toggle('on', !!n); fb.addEventListener('click', pbOpenSheet); row.appendChild(fb);
@@ -16981,7 +17002,7 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
       let chipEl = null;
       if (chips) { chips.classList.add('pb-chips'); chipEl = chips; }
       else if (perChips) { chipEl = pbChipsOf(perChips); pbHide(perChips); }
-      if (search) { pb.appendChild(row); if (chipEl) pb.appendChild(chipEl); }
+      if (search || vt) { pb.appendChild(row); if (chipEl) pb.appendChild(chipEl); }
       else if (chipEl && rest.length) { const fr = row.querySelector('.pb-filter'); const r2 = document.createElement('div'); r2.className = 'pb-chiprow'; r2.appendChild(chipEl); r2.appendChild(fr); pb.appendChild(r2); }   // no search: the chips with «فلتەر» at their end, one row
       else if (chipEl) pb.appendChild(chipEl);
       else if (rest.length) pb.appendChild(row);
