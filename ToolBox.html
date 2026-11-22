@@ -2,7 +2,7 @@
 <html lang="ckb" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="tb-build" content="202611222150">
+<meta name="tb-build" content="202611222205">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#F4F4F6">
 <title>ToolBox</title>
@@ -1048,22 +1048,31 @@ tr.row-dim td .num,tr.row-dim td{opacity:.85}
 .sale-head .sale-cartbtn{min-width:38px}
 .cc-dot{position:absolute;top:-3px;inset-inline-end:-3px;width:8px;height:8px;border-radius:50%;background:#34C759;box-shadow:0 0 0 2px var(--card)}
 .cc-dot.bad{background:#FF3B30}
-.cc-pop{position:fixed;z-index:80;width:340px;max-width:calc(100vw - 16px);max-height:calc(100dvh - 80px);overflow:auto;background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:0 16px 48px rgba(0,0,0,.18);padding:12px;display:flex;flex-direction:column;gap:8px}
-.cc-clock{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0 10px;border-bottom:1px solid var(--line)}
-.cc-clock>b{font-size:30px;font-weight:700;letter-spacing:-.5px}.cc-clock>span{color:var(--muted);font-size:13px}
-.cc-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.cc-t{display:flex;align-items:center;gap:10px;padding:10px;border-radius:14px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer;text-align:start;font:inherit}
-.cc-t svg{width:20px;height:20px;flex:none;padding:7px;border-radius:50%;background:var(--key);box-sizing:content-box}
+.cc-pop{position:fixed;z-index:80;width:330px;max-width:calc(100vw - 16px);background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:0 16px 48px rgba(0,0,0,.18);padding:10px;display:flex;flex-direction:column;gap:7px}
+.cc-head{display:flex;align-items:center;gap:8px;padding:2px 4px 6px}
+.cc-clock{flex:1;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}.cc-clock>b{font-size:20px;font-weight:700}.cc-clock>span{color:var(--muted);font-size:12.5px}
+.cc-x{display:none;width:32px;height:32px;border-radius:50%;border:none;background:var(--key);color:var(--ink);place-items:center;cursor:pointer}
+.cc-grid{display:grid;gap:7px}
+.cc-t{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:10px 4px;border-radius:14px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer;font:inherit;min-height:74px}
+.cc-t svg{width:18px;height:18px;padding:8px;border-radius:50%;background:var(--key);box-sizing:content-box}
 .cc-t.on svg{background:var(--accent);color:var(--accent-ink,#fff)}
-.cc-t span{display:flex;flex-direction:column;min-width:0}.cc-t b{font-size:13px}.cc-t small{font-size:11.5px;color:var(--muted)}
-.cc-row{display:flex;align-items:center;gap:10px;padding:10px;border-radius:14px;background:var(--bg);border:1px solid var(--line)}
-.cc-row>svg{width:20px;height:20px;flex:none;color:var(--muted)}
-.cc-row>span{flex:1;display:flex;flex-direction:column;min-width:0}.cc-row b{font-size:13px}.cc-row small{font-size:12px;color:var(--muted)}
+.cc-t b{font-size:12px;font-weight:600;text-align:center;line-height:1.3}
+.cc-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:14px;background:var(--bg);border:1px solid var(--line);min-height:48px}
+.cc-row>svg,.cc-aa{width:20px;height:20px;flex:none;color:var(--muted)}
+.cc-aa{font:700 14px/20px var(--num);text-align:center}
+.cc-row>span:not(.cc-aa){flex:1;display:flex;flex-direction:column;min-width:0}.cc-row b{font-size:13px}.cc-row small{font-size:12px;color:var(--muted)}
 .cc-row.ok>svg{color:#34C759}.cc-row.bad>svg{color:#FF3B30}.cc-row.bad small{color:#FF3B30}
-.cc-link{text-decoration:none;color:var(--ink)}.cc-link:hover{background:var(--key)}.cc-link>svg:last-child{width:16px;height:16px;color:var(--muted)}
+.cc-row .btn.sm{min-width:64px}
 .cc-seg{display:flex;gap:2px;background:var(--key);border-radius:9px;padding:2px}
 .cc-seg button{border:none;background:none;padding:5px 9px;border-radius:7px;font:600 12px/1 inherit;color:var(--ink);cursor:pointer}
 .cc-seg button.on{background:var(--card);box-shadow:0 1px 2px rgba(0,0,0,.12)}
+@media (max-width:640px){
+  .cc-pop{inset:0!important;width:auto;max-width:none;height:100dvh;border-radius:0;border:none;box-shadow:none;padding:calc(12px + env(safe-area-inset-top)) 14px calc(14px + env(safe-area-inset-bottom));gap:10px;overflow-y:auto}
+  .cc-x{display:grid}
+  .cc-clock>b{font-size:26px}
+  .cc-t{min-height:88px}.cc-t b{font-size:13px}
+  .cc-row{min-height:56px}
+}
 #view .pbar .pb-search{display:flex!important;align-items:center!important;gap:8px!important}
 #view .pb-search>.search{margin:0!important;align-self:center!important}
 #view .pb-search>.search input.f{height:38px!important;box-sizing:border-box!important;margin:0!important}
@@ -16484,13 +16493,15 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
     ['money', [['shifts', 'clock', 'shifts'], ['expenses', 'wallet', 'expenses'], ['reports', 'chart', 'reports']]],
     ['system', [['activity', 'list', 'users'], ['settings', 'gear', 'settings']]]
   ];
-  function ccNeeds() {   // something in the control center wants a look: a red dot on its button
+  function ccNeeds() {   // what in the control center wants a look (shown as a red dot and its tooltip)
     const sh = C.currentShift();
-    if (can('shifts') && ((!sh && C.db.settings.requireShift) || (sh && C.shiftIsStale(sh)))) return true;
-    if (PhoneSync.linked && PhoneSync.state === 'off') return true;
-    return false;
+    if (can('shifts') && sh && C.shiftIsStale(sh)) return _t('شیفتی ڕۆژێکی تر هێشتا کراوەیە');
+    if (can('shifts') && !sh && C.db.settings.requireShift) return _t('شیفت داخراوە');
+    if (PhoneSync.linked && PhoneSync.state === 'off') return _t('پەیوەندی بە کۆمپیوتەرەوە نییە');
+    return '';
   }
-  function ccDot() { $$('[data-cc-dot]').forEach(d => { d.classList.toggle('bad', ccNeeds()); }); }
+  function ccDot() { const why = ccNeeds();
+    $$('[data-cc-dot]').forEach(d => { d.classList.toggle('bad', !!why); const b = d.closest('[data-cc]'); if (b) b.title = why ? `${_t('کۆنترۆڵ سەنتەر')} · ${why}` : _t('کۆنترۆڵ سەنتەر'); }); }
   setInterval(() => { if (ctx.user) ccDot(); }, 15000);
   function lockScreen() {   // locking = the sign-in screen; the cart is kept and comes back with the same PIN
     if (!ctx.user) return;
@@ -16500,51 +16511,55 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
   function openCC(btn) {
     const old = $('.cc-pop'); if (old) { old.remove(); return; }
     const pop = document.createElement('div'); pop.className = 'cc-pop'; pop.setAttribute('role', 'dialog'); pop.setAttribute('aria-label', _t('کۆنترۆڵ سەنتەر'));
-    const wide = innerWidth >= 900;
+    const wide = innerWidth >= 900, phone = innerWidth <= 640;
+    let clk = 0;
+    const close = () => { clearInterval(clk); pop.remove(); document.removeEventListener('click', off, true); document.removeEventListener('keydown', off, true); };
+    const off = ev => { if (ev.type === 'keydown' && ev.key !== 'Escape') return; if (ev.type === 'click' && (pop.contains(ev.target) || btn.contains(ev.target))) return; close(); };
+    const clockHTML = () => { const d = new Date(); return `<b class="num">${fTime(d)}</b><span>${KU_DAYS[d.getDay()]} <span class="num">${fDate(d)}</span></span>`; };
     const draw = () => {
-      const d = new Date(), sh = C.currentShift(), stale = sh && C.shiftIsStale(sh), S = C.db.settings, L = Look.prefs;
-      const tile = (k, icn, label, on, sub) => `<button type="button" class="cc-t ${on ? 'on' : ''}" data-cct="${k}">${ic(icn)}<span><b>${label}</b>${sub ? `<small>${sub}</small>` : ''}</span></button>`;
+      const sh = C.currentShift(), stale = sh && C.shiftIsStale(sh), S = C.db.settings, L = Look.prefs, dark = Look.isDark();
+      const tiles = [
+        ['dark', dark ? 'moon' : 'moon', _t('دۆخی تاریک'), dark],
+        ['sound', 'sound', _t('دەنگ'), Snd.prefs.on],
+        ['lock', 'lock', _t('قفڵکردن'), false],
+        wide && document.fullscreenEnabled ? ['fs', document.fullscreenElement ? 'shrink' : 'expand', _t('پڕبەشاشە'), !!document.fullscreenElement] : !wide ? ['cam', 'camera', _t('سکانی بارکۆد'), false] : ['fs0', 'expand', _t('پڕبەشاشە'), false],
+        ...(can('settings') ? [['print', 'printer', _t('چاپی خۆکار'), !!S.autoPrint], ['set', 'gear', _t('ڕێکخستن'), false]] : [])
+      ].filter(t => t[0] !== 'fs0');
+      const cols = tiles.length === 4 ? 2 : 3;
       const shTxt = sh ? (stale ? _t('شیفتی ڕۆژێکی تر هێشتا کراوەیە') : `${_t('کراوەیە لە')} <span class="num">${fTime(sh.openedAt)}</span>`) : _t('شیفت داخراوە');
       const sync = PhoneSync.linked ? (PhoneSync.state === 'off' ? _t('پەیوەندی بە کۆمپیوتەرەوە نییە') : PhoneSync.state === 'busy' ? _t('یەکدەخرێت…') : _t('یەکگرتووە')) : '';
-      pop.innerHTML = `<div class="cc-clock"><b class="num">${fTime(d)}</b><span>${KU_DAYS[d.getDay()]} <span class="num">${fDate(d)}</span></span></div>
-        ${can('shifts') ? `<div class="cc-row ${!sh || stale ? 'bad' : 'ok'}">${ic('clock')}<span><b>${_t('شیفت')}</b><small>${shTxt}</small></span><a class="btn sm ${sh && !stale ? 'ghost' : ''}" href="#/shifts${sh ? '' : '?open=1'}" data-cc-go>${sh ? _t('داخستن') : _t('کردنەوە')}</a></div>` : ''}
-        ${sync ? `<div class="cc-row ${PhoneSync.state === 'off' ? 'bad' : 'ok'}">${ic('devices')}<span><b>${_t('یەکگرتنەوە لەگەڵ کۆمپیوتەر')}</b><small>${sync}</small></span><button type="button" class="btn ghost sm" data-cc-sync>${_t('ئێستا')}</button></div>` : ''}
-        <div class="cc-grid">
-          ${tile('dark', Look.isDark() ? 'moon' : 'sun', _t('دۆخی تاریک'), Look.isDark())}
-          ${tile('sound', 'sound', _t('دەنگ'), Snd.prefs.on)}
-          ${can('settings') ? tile('print', 'printer', _t('چاپی خۆکار'), !!S.autoPrint, _t('پسوڵە')) : ''}
-          ${wide && document.fullscreenEnabled ? tile('fs', document.fullscreenElement ? 'shrink' : 'expand', _t('پڕبەشاشە'), !!document.fullscreenElement, 'F11') : ''}
-          ${!wide ? tile('cam', 'camera', _t('سکانی بارکۆد'), false, _t('کامێرا')) : ''}
-          ${tile('lock', 'lock', _t('قفڵکردن'), false, _t('شاشە'))}
-        </div>
-        <div class="cc-row">${ic('edit')}<span><b>${_t('قەبارەی نووسین')}</b></span><div class="cc-seg">${[['n', 'A'], ['l', 'A+'], ['xl', 'A++']].map(([k, l]) => `<button type="button" data-cc-size="${k}" class="${L.size === k ? 'on' : ''}">${l}</button>`).join('')}</div></div>
+      pop.innerHTML = `<div class="cc-head"><div class="cc-clock" data-cc-clock>${clockHTML()}</div><button type="button" class="cc-x" data-cc-x aria-label="${_t('داخستن')}">${ic('x')}</button></div>
+        ${can('shifts') ? `<div class="cc-row ${!sh || stale ? 'bad' : 'ok'}">${ic('clock')}<span><b>${_t('شیفت')}</b><small>${shTxt}</small></span><button type="button" class="btn ghost sm" data-cc-shift="${sh ? 'close' : 'open'}">${sh ? _t('داخستن') : _t('کردنەوە')}</button></div>` : ''}
+        ${sync ? `<div class="cc-row ${PhoneSync.state === 'off' ? 'bad' : 'ok'}">${ic('devices')}<span><b>${_t('یەکگرتنەوە')}</b><small>${sync}</small></span><button type="button" class="btn ghost sm" data-cc-sync>${_t('ئێستا')}</button></div>` : ''}
+        <div class="cc-grid" style="grid-template-columns:repeat(${cols},1fr)">${tiles.map(([k, icn, label, on]) => `<button type="button" class="cc-t ${on ? 'on' : ''}" data-cct="${k}" aria-pressed="${on ? 'true' : 'false'}">${ic(icn)}<b>${label}</b></button>`).join('')}</div>
+        <div class="cc-row"><span class="cc-aa">Aa</span><span><b>${_t('قەبارەی نووسین')}</b></span><div class="cc-seg">${[['n', 'A'], ['l', 'A+'], ['xl', 'A++']].map(([k, l]) => `<button type="button" data-cc-size="${k}" class="${L.size === k ? 'on' : ''}">${l}</button>`).join('')}</div></div>
         <div class="cc-row">${ic('globe')}<span><b>${_t('زمان')}</b></span><div class="cc-seg">${LANGS.map(([k, l]) => `<button type="button" data-cc-lang="${k}" class="${I18N.prefs.lang === k ? 'on' : ''}">${l}</button>`).join('')}</div></div>
-        ${can('settings') ? `<a class="cc-row cc-link" href="#/settings" data-cc-go>${ic('gear')}<span><b>${_t('ڕێکخستنەکان')}</b><small>${_t('هەموو ڕێکخستنەکانی ئەپ')}</small></span>${ic('chev')}</a>` : ''}
         ${can('backup') || can('settings') ? `<div class="cc-row">${ic('download')}<span><b>${_t('پاشەکەوت')}</b><small>${S.lastBackupAt ? `${_t('دوایین:')} ${timeAgo(new Date(S.lastBackupAt).getTime())}` : _t('هێشتا نەکراوە')}</small></span><button type="button" class="btn ghost sm" data-cc-bk>${_t('ئێستا')}</button></div>` : ''}`;
     };
-    draw(); document.body.appendChild(pop);
-    const place = () => { const r = btn.getBoundingClientRect(); pop.style.top = Math.round(r.bottom + 8) + 'px'; pop.style.left = Math.round(Math.max(8, Math.min(innerWidth - pop.offsetWidth - 8, r.left + r.width / 2 - pop.offsetWidth / 2))) + 'px'; };
-    place();
+    const place = () => { if (phone) return; const r = btn.getBoundingClientRect(); pop.style.top = Math.round(r.bottom + 8) + 'px'; pop.style.left = Math.round(Math.max(8, Math.min(innerWidth - pop.offsetWidth - 8, r.left + r.width / 2 - pop.offsetWidth / 2))) + 'px'; };
+    const redraw = () => { draw(); place(); };
+    draw(); document.body.appendChild(pop); place();
+    clk = setInterval(() => { const c = $('[data-cc-clock]', pop); if (c) c.innerHTML = clockHTML(); if (!pop.isConnected) clearInterval(clk); }, 5000);
     pop.addEventListener('click', e => {
+      if (e.target.closest('[data-cc-x]')) { close(); return; }
       const t = e.target.closest('[data-cct]');
       if (t) { const k = t.dataset.cct;
         if (k === 'dark') Look.set('mode', Look.isDark() ? 'light' : 'dark');
         else if (k === 'sound') { Snd.set('on', !Snd.prefs.on); if (Snd.prefs.on) Snd.play('scan', true); }
         else if (k === 'print') { try { C.updateSettings({ autoPrint: !C.db.settings.autoPrint }); C.logEvent('settings', _t('چاپی خۆکار گۆڕدرا'), ctx.user.id); } catch (er) { toast(_t('نەکرا')); } }
-        else if (k === 'fs') { pop.remove(); if (document.fullscreenElement) document.exitFullscreen().catch(() => {}); else document.documentElement.requestFullscreen().catch(() => {}); return; }
-        else if (k === 'cam') { pop.remove(); if (route().name !== 'sale') navigate('/sale'); setTimeout(() => { const c = $('#view [data-cam]'); if (c) c.click(); }, 250); return; }
-        else if (k === 'lock') { pop.remove(); lockScreen(); return; }
-        draw(); place(); return; }
-      const sz = e.target.closest('[data-cc-size]'); if (sz) { Look.set('size', sz.dataset.ccSize); draw(); place(); return; }
-      const lg = e.target.closest('[data-cc-lang]'); if (lg) { pop.remove(); setLang('lang', lg.dataset.ccLang); return; }
-      if (e.target.closest('[data-cc-sync]')) { PhoneSync.now(); toast(_t('یەکدەخرێت…')); setTimeout(() => { if (pop.isConnected) { draw(); place(); } }, 1500); return; }
-      const bk = e.target.closest('[data-cc-bk]'); if (bk) { Busy.button(bk, () => doBackup()).then(() => { if (pop.isConnected) { draw(); place(); } }); return; }
-      if (e.target.closest('[data-cc-go]')) pop.remove();
+        else if (k === 'fs') { close(); if (document.fullscreenElement) document.exitFullscreen().catch(() => {}); else document.documentElement.requestFullscreen().catch(() => {}); return; }
+        else if (k === 'cam') { close(); if (route().name !== 'sale') navigate('/sale'); setTimeout(() => { const c = $('#view [data-cam]'); if (c) c.click(); }, 250); return; }
+        else if (k === 'lock') { close(); lockScreen(); return; }
+        else if (k === 'set') { close(); navigate('/settings'); return; }
+        redraw(); return; }
+      const shb = e.target.closest('[data-cc-shift]'); if (shb) { close(); navigate('/shifts?' + (shb.dataset.ccShift === 'open' ? 'open=1' : 'close=1')); return; }
+      const sz = e.target.closest('[data-cc-size]'); if (sz) { Look.set('size', sz.dataset.ccSize); redraw(); return; }
+      const lg = e.target.closest('[data-cc-lang]'); if (lg) { if (lg.classList.contains('on')) return; const v = lg.dataset.ccLang; close();
+        askConfirm(_t('ئەپەکە بە زمانی نوێ دەکرێتەوە. سەبەتە و داتاکان دەمێننەوە.'), _t('گۆڕین'), false).then(ok => { if (ok) setLang('lang', v); }); return; }
+      if (e.target.closest('[data-cc-sync]')) { PhoneSync.now(); toast(_t('یەکدەخرێت…')); setTimeout(() => { if (pop.isConnected) redraw(); }, 1500); return; }
+      const bk = e.target.closest('[data-cc-bk]'); if (bk) { Busy.button(bk, () => doBackup()).then(() => { if (pop.isConnected) redraw(); }); return; }
     });
-    setTimeout(() => {
-      const off = ev => { if (ev.type === 'keydown' && ev.key !== 'Escape') return; if (ev.type === 'click' && (pop.contains(ev.target) || btn.contains(ev.target))) return; pop.remove(); document.removeEventListener('click', off, true); document.removeEventListener('keydown', off, true); };
-      document.addEventListener('click', off, true); document.addEventListener('keydown', off, true);
-    });
+    setTimeout(() => { document.addEventListener('click', off, true); document.addEventListener('keydown', off, true); });
   }
   const APP_TONE = { sell: '#34C759', goods: '#FF9500', people: '#007AFF', money: '#AF52DE', system: '#8E8E93' };
   const appTiles = cur => NAV.flatMap(([g, list]) => list.filter(([, , perm]) => !perm || can(perm)).map(([k, i]) => `<a class="ah-app${k === cur ? ' on' : ''}" href="#/${k}" style="--t:${APP_TONE[g]}"><span class="ah-ic">${ic(i)}<span class="badge nav-nb hidden" data-navbadge="${k}"></span></span><span class="ah-t">${T.nav[k]}</span></a>`)).join('');
