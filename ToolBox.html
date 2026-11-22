@@ -2,7 +2,7 @@
 <html lang="ckb" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="tb-build" content="202611222015">
+<meta name="tb-build" content="202611222030">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#F4F4F6">
 <title>ToolBox</title>
@@ -1040,6 +1040,20 @@ tr.row-dim td .num,tr.row-dim td{opacity:.85}
 .tb-date{display:none}
 .tb-home{display:none}
 .pb-head-hide{display:none!important}
+.tb-acts{display:flex;align-items:center;gap:6px;flex:none}.tb-acts:empty{display:none}
+.tb-acts>.pb-ic{width:34px;height:34px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);display:grid;place-items:center;cursor:pointer}
+.tb-acts .tb-new{height:34px;border-radius:10px;padding:0 12px;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.tb-acts svg{width:17px;height:17px}
+.search:has(>.pb-filter){position:relative}
+.search>.pb-filter{position:absolute!important;inset-inline-end:4px;top:50%;transform:translateY(-50%);height:30px!important;border:none!important;background:transparent!important;padding:0 8px!important;border-radius:8px!important}
+.search>.pb-filter:hover{background:var(--key)!important}
+.search>.pb-filter.on{color:var(--accent)}
+.search:has(>.pb-filter) input.f{padding-inline-end:96px!important}
+@media (max-width:640px){ .search>.pb-filter span{display:none} .search:has(>.pb-filter) input.f{padding-inline-end:52px!important} .tb-acts .tb-new span{display:none} .tb-acts .tb-new{width:34px;padding:0;justify-content:center} }
+.sale-chips{display:flex;gap:6px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:none}.sale-chips::-webkit-scrollbar{display:none}
+.sale-chips>button{flex:none;height:32px;padding:0 14px;border-radius:16px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:600 13px/1 inherit;cursor:pointer;display:inline-flex;align-items:center;gap:5px}
+.sale-chips>button small{opacity:.6;font-weight:500}
+.sale-chips>button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .apps-ui #view>.page-head>div:first-child:has(>h1){display:none}
 .pb-search>.pb-acts{display:flex!important;align-items:center;gap:8px;flex:none}
 .pb-search>.view-tog{margin:0!important;height:40px;display:inline-flex;align-items:center}
@@ -8752,8 +8766,9 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
       ctx.saleList = { key: `${C.dataVer()}|${C.db.products.length}|${q}|${ctx.saleCat || ''}|${ctx.showOut ? 1 : 0}|${C.db.settings.allowNegative ? 1 : 0}`, prods, outHidden };
     }
     const cats = ctx.saleCats.cats, prods = ctx.saleList.prods, outHidden = ctx.saleList.outHidden;
-    const catChips = '';
-    const catSel = cats.length > 1 ? `<select class="f sale-cat ${ctx.saleCat ? 'on' : ''}" data-salecat aria-label="${_t('پۆل')}">${[['', _t('هەموو پۆلەکان')]].concat(cats.map(c => [c, c])).map(([v, l]) => `<option value="${esc(v)}" ${ctx.saleCat === v ? 'selected' : ''}>${v ? _tf('پۆل: {0} ({1})', esc(l), ctx.saleCats.count.get(v) || 0) : esc(l)}</option>`).join('')}</select>` : '';
+    const saleWide = (() => { try { return matchMedia('(min-width: 641px)').matches; } catch (e) { return true; } })();
+    const catChips = saleWide && cats.length > 1 ? `<div class="sale-chips" role="tablist" aria-label="${_t('پۆل')}">${[['', _t('هەموو')]].concat(cats.map(c => [c, c])).map(([v, l]) => `<button type="button" data-cat="${esc(v)}" class="${(ctx.saleCat || '') === v ? 'on' : ''}">${esc(l)}${v ? ` <small class="num">${ctx.saleCats.count.get(v) || 0}</small>` : ''}</button>`).join('')}</div>` : '';
+    const catSel = !saleWide && cats.length > 1 ? `<select class="f sale-cat ${ctx.saleCat ? 'on' : ''}" data-salecat aria-label="${_t('پۆل')}">${[['', _t('هەموو پۆلەکان')]].concat(cats.map(c => [c, c])).map(([v, l]) => `<option value="${esc(v)}" ${ctx.saleCat === v ? 'selected' : ''}>${v ? _tf('پۆل: {0} ({1})', esc(l), ctx.saleCats.count.get(v) || 0) : esc(l)}</option>`).join('')}</select>` : '';
     const showKey = q + '|' + (ctx.saleCat || ''); if (ctx.saleShowKey !== showKey) { ctx.saleShowKey = showKey; ctx.saleShow = SALE_FIRST; }
     const saleShow = ctx.saleShow || SALE_FIRST;
     applyOffers(ctx.cart);   // offers first, so every total below already has them
@@ -16604,7 +16619,7 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
       </aside>
       <div class="scrim" data-scrim></div>
       <div class="main-col" data-page-scroll>
-        <header class="topbar"><button class="icon-btn" data-menu aria-label="${_t('مێنیو')}">${ic('menu')}</button><a class="icon-btn tb-home" href="#/apps" data-nav="apps" title="${_t('هەموو بەشەکان')}" aria-label="${_t('هەموو بەشەکان')}">${ic('grid')}</a><div class="title" data-title data-apps-sw></div>
+        <header class="topbar"><button class="icon-btn" data-menu aria-label="${_t('مێنیو')}">${ic('menu')}</button><a class="icon-btn tb-home" href="#/apps" data-nav="apps" title="${_t('هەموو بەشەکان')}" aria-label="${_t('هەموو بەشەکان')}">${ic('grid')}</a><div class="title" data-title data-apps-sw></div><span class="tb-acts" data-tb-acts></span>
           <button class="icon-btn tb-fs" data-fullscreen title="${_t('پڕبەشاشە (F11)')}" aria-label="${_t('پڕبەشاشە')}">${ic(document.fullscreenElement ? 'shrink' : 'expand')}</button><div class="tb-group"><button class="icon-btn tb-theme" data-theme-toggle title="${Look.isDark() ? _t('دۆخی ڕووناک') : _t('دۆخی تاریک')}" aria-label="${Look.isDark() ? _t('دۆخی ڕووناک') : _t('دۆخی تاریک')}">${ic(Look.isDark() ? 'sun' : 'moon')}</button><span class="sync-slot" data-sync-slot></span><span data-shift-slot></span><span data-rate-slot></span>${bellHTML()}<button type="button" class="tb-user" data-user-menu style="background:${Login.colorFor(u)}" title="${esc(u.name)}" aria-label="${esc(u.name)}">${esc(Login.initials(u.name))}</button></div>
           <div class="tb-date" data-tb-date></div></header>
         <main class="main" id="view"></main>
@@ -16717,6 +16732,7 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
     const ac = new AbortController(); fresh._abort = ac;
     fresh.addEventListener = function (t, f, o) { return EventTarget.prototype.addEventListener.call(this, t, f, Object.assign(o && typeof o === 'object' ? Object.assign({}, o) : { capture: !!o }, { signal: ac.signal })); };
     if (page.mount) page.mount(fresh);
+    { const ta = $('[data-tb-acts]'); if (ta) ta.innerHTML = ''; }   // the page's own buttons in the top bar: filled again below
     if (window.__tbPhone) try { window.__tbPhone(); } catch (e) { console.error(e); }   // the phone's shape before the first frame: no flash of the computer's toolbar
     if (qSel) { const nq = $('#q', fresh); if (nq) { nq.focus({ preventScroll: true }); try { nq.setSelectionRange(qSel[0], qSel[1]); } catch (e) { /* not a text box */ } } else qKeeper().blur(); }
     bindAutoMore(fresh);   // long lists of cards grow by themselves near their end
@@ -17003,10 +17019,17 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
       if (search) row.appendChild(search); else { const sp = document.createElement('div'); sp.className = 'pb-sp'; row.appendChild(sp); }
       if (cam) row.appendChild(cam);
       if (vt) row.appendChild(vt);
-      const addActs = () => { if (acts.children.length) row.appendChild(acts); };   // ⋯ and + on the same line as the search
+      const addActs = () => {   // + and ⋯ go up beside the section's name; the search line keeps only the search
+        const slot = $('[data-tb-acts]'); if (!acts.children.length) return;
+        if (!slot) { row.appendChild(acts); return; }
+        [...acts.children].forEach(b => {
+          if (b === primary) { const px = document.createElement('button'); px.type = 'button'; px.className = 'btn sm tb-new'; px.innerHTML = primary.innerHTML; px.addEventListener('click', () => primary.click()); slot.appendChild(px); head.appendChild(primary); }   // the real button stays in the page (hidden with its header) so its click still works
+          else slot.appendChild(b);
+        });
+      };
       if (rest.length) {
         const fb = document.createElement('button'); fb.type = 'button'; fb.className = 'pb-filter'; const n = rest.filter(pbActive).length;
-        fb.innerHTML = `${ic('filter')}<span>${_t('فلتەر')}</span>${n ? `<b class="num">${n}</b>` : ''}`; fb.classList.toggle('on', !!n); fb.addEventListener('click', pbOpenSheet); row.appendChild(fb);
+        fb.innerHTML = `${ic('filter')}<span>${_t('فلتەر')}</span>${n ? `<b class="num">${n}</b>` : ''}`; fb.classList.toggle('on', !!n); fb.addEventListener('click', pbOpenSheet); (search || row).appendChild(fb);
       }
       addActs();
       let chipEl = null;
