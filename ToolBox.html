@@ -2,7 +2,7 @@
 <html lang="ckb" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="tb-build" content="202611221915">
+<meta name="tb-build" content="202611221930">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#F4F4F6">
 <title>ToolBox</title>
@@ -1039,6 +1039,10 @@ tr.row-dim td .num,tr.row-dim td{opacity:.85}
 
 .tb-date{display:none}
 .tb-home{display:none}
+.apps-ui .shell>.side,.apps-ui .shell>.scrim{display:none}
+.apps-ui .topbar [data-menu]{display:none}
+.apps-ui .tb-home{display:grid}
+@media (max-width:640px){ .ah-grid{grid-template-columns:repeat(3,1fr);gap:10px} .ah-app{padding:16px 4px 12px;border-radius:16px;font-size:12.5px;gap:8px} .ah-ic{width:48px;height:48px;border-radius:14px} .ah-ic svg{width:23px;height:23px} .ah-user .btn{flex:1} }
 @media (min-width:900px){
   .apps-ui .shell{grid-template-columns:1fr}
   .apps-ui .shell>.side,.apps-ui .shell>.scrim{display:none}
@@ -4486,7 +4490,7 @@ input.f[type=date]::-webkit-date-and-time-value,input.f[type=datetime-local]::-w
 @media (max-width:640px){ .fin-box{max-width:none!important} }   
 
 .pbar,.pb-acts{display:none}
-@media (max-width:640px){
+@media all{
   .pb-gone{display:none!important}
   #view>.page-head:has(>.pb-acts){display:flex!important;flex-direction:row!important;align-items:center;justify-content:space-between;gap:10px;flex-wrap:nowrap!important}
   #view>.page-head:has(>.pb-acts)>:first-child{min-width:0;flex:1}
@@ -4529,13 +4533,15 @@ input.f[type=date]::-webkit-date-and-time-value,input.f[type=datetime-local]::-w
 .pb-menu>button{display:flex;align-items:center;gap:10px;height:44px;padding:0 12px;border:none;background:none;color:var(--ink);font:500 15px/1 inherit;border-radius:9px;cursor:pointer;text-align:start;white-space:nowrap}
 .pb-menu>button:active,.pb-menu>button:hover{background:var(--key)}
 .pb-menu>button svg{width:18px;height:18px;color:var(--muted)}
-@media (max-width:640px){
+@media all{
   .pb-chiprow{display:flex;align-items:center;gap:8px;margin:0 -12px 0 0;padding-inline-start:12px}
   .pb-chiprow>.pb-chips{flex:1 1 0!important;min-width:0!important;width:auto!important;display:flex!important;flex-wrap:nowrap!important;overflow-x:auto!important;gap:6px!important;background:none!important;padding:0 0 2px!important;max-width:none!important;scrollbar-width:none;border-radius:0!important;box-shadow:none!important}
   .pb-chiprow>.pb-chips::-webkit-scrollbar{display:none}
   .pb-chiprow>.pb-chips>button{flex:none!important;height:32px;display:inline-flex!important;align-items:center;padding:0 13px!important;border-radius:16px!important;border:1px solid var(--line)!important;background:var(--card)!important;color:var(--ink)!important;font:500 13.5px/1 inherit!important;white-space:nowrap!important;box-shadow:none!important;min-width:0!important}
   .pb-chiprow>.pb-chips>button.on{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important}
   .pb-chiprow>.pb-filter{height:32px;border-radius:16px;padding:0 11px;font-size:13.5px}
+}
+@media (max-width:640px){
   
   .sale-head:has(+.pb-sale){margin-bottom:0}
   .pb-sale{margin:0 0 8px}
@@ -7832,11 +7838,11 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
   const DAYS = ['یەکشەممە', 'دووشەممە', 'سێشەممە', 'چوارشەممە', 'پێنجشەممە', 'هەینی', 'شەممە'];
   const dayName = i => I18N.lang === 'en' ? ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][i] : _t(DAYS[i]);
   const dWords = (d, o) => [o.w ? dayName(d.getDay()) + (o.d || o.m ? (I18N.lang === 'en' ? ',' : '،') : '') : '', o.d ? (o.d === 2 ? String(d.getDate()).padStart(2, '0') : d.getDate()) : '', o.m ? monName(d.getMonth(), o.m === 'long') : '', o.y ? d.getFullYear() : ''].filter(x => x !== '').join(' ');
-  const fDate = iso => { const d = new Date(iso); return d.getTime() === d.getTime() ? `${String(d.getDate()).padStart(2, '0')} ${monName(d.getMonth())} ${d.getFullYear()}` : 'Invalid Date'; };
-  const fTime = d => { const t = new Date(d), h = t.getHours(); return `${h % 12 || 12}:${String(t.getMinutes()).padStart(2, '0')}\u00a0${I18N.lang === 'ku' ? (h < 12 ? 'پ.ن' : 'د.ن') : I18N.lang === 'ar' ? (h < 12 ? 'ص' : 'م') : h < 12 ? 'AM' : 'PM'}`; };   // AM/PM never alone on a line
+  const fDate = iso => { const d = new Date(iso); return d.getTime() === d.getTime() ? `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}` : 'Invalid Date'; };   // dd/mm/yyyy everywhere
+  const fTime = d => { const t = new Date(d), h = t.getHours(); return `${h % 12 || 12}:${String(t.getMinutes()).padStart(2, '0')}\u00a0${h < 12 ? 'AM' : 'PM'}`; };   // dates and times are not translated   // AM/PM never alone on a line
   const KU_DAYS = DAYS.map(x => _t(x));
-  const dayDate = d => I18N.lang === 'en' ? `${KU_DAYS[d.getDay()]}, <span class="num">${d.getDate()} ${MON_L[d.getMonth()]} ${d.getFullYear()}</span>` : `${KU_DAYS[d.getDay()]} <span class="num">${d.getDate()} - ${d.getMonth() + 1} - ${d.getFullYear()}</span>`;
-  const fDT = iso => `<span class="num">${fDate(iso).replace(/ /g, '\u00a0')} · ${fTime(iso)}</span>`;   // breaks only between the date and the time
+  const dayDate = d => I18N.lang === 'en' ? `${KU_DAYS[d.getDay()]}, <span class="num">${d.getDate()} ${MON_L[d.getMonth()]} ${d.getFullYear()}</span>` : `${KU_DAYS[d.getDay()]} <span class="num" dir="ltr" style="direction:ltr">${fDate(d)}</span>`;
+  const fDT = iso => `<span class="num" dir="ltr" style="direction:ltr">${fDate(iso).replace(/ /g, '\u00a0')} · ${fTime(iso)}</span>`;   // breaks only between the date and the time
   const ymd = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 
   try { if (matchMedia('(pointer: coarse)').matches) ['gesturestart', 'gesturechange'].forEach(t => document.addEventListener(t, e => e.preventDefault(), { passive: false })); } catch (e) { /* not a touch screen */ }
@@ -16941,9 +16947,10 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
       return true;
     };
     const PBar = () => {
-      const view = $('#view'); if (!view || !narrow()) return;
+      const view = $('#view'); if (!view) return;
       if (view.querySelector(':scope > .pbar, :scope .pbar')) return;   // already done for this drawing of the page
-      if (pbSale(view)) return;
+      if (!narrow() && view.querySelector('.pos-layout')) return;   // the computer's selling screen keeps its own layout
+      if (narrow() && pbSale(view)) return;
       const head = view.querySelector(':scope > .page-head'), bars = [...view.querySelectorAll(':scope > .toolbar')];
       if (!head || !bars.length || view.querySelector('.set-split, .sh-now')) return;
       const all = [...head.querySelectorAll('.btn'), ...bars.flatMap(b => [...b.querySelectorAll(':scope > .btn, :scope > button.btn')])].filter(b => !b.closest('.seg'));
@@ -16955,8 +16962,8 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
       const sels = bars.flatMap(b => [...b.querySelectorAll(':scope > select.f')]);
       const ppChips = bars.map(b => b.querySelector('.pp-s') && b.querySelector('.pp-s').parentElement).find(Boolean);
       const per = sels.find(s => s.dataset.filter === 'p');
-      let chips = ppChips || segs.find(s => s.dataset.seg === 'f') || null, perChips = null;
-      if (!chips && per) perChips = per; else if (!chips) chips = segs.find(s => s.matches('[data-seg]')) || null;
+      let chips = segs.find(s => s.dataset.seg === 'tab') || null, perChips = null;   // real tabs stay in sight; every filter goes behind «فلتەر»
+      void ppChips; void per;
       const rest = [...sels, ...segs].filter(e => e !== chips && e !== perChips);
       const dates = bars.map(b => b.querySelector(':scope > .inrow')).find(x => x && x.querySelector('[data-from]'));
       const pb = document.createElement('div'); pb.className = 'pbar';
@@ -16987,7 +16994,7 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
       pbFade(pb.querySelector('.pb-chips'));
       if (pbSheet) pbFill();   // the page was drawn again under an open «فلتەر»: its rows follow
     };
-    window.__tbPhone = () => { if (!narrow()) return; cardTables(document); PBar(); };
+    window.__tbPhone = () => { if (narrow()) cardTables(document); PBar(); };   // one search + one «فلتەر» on every screen
     let queued = false;
     const later = () => { if (queued || !narrow()) return; queued = true; setTimeout(() => { queued = false; try { cardTables(document); } catch (e) { console.error(e); } try { PBar(); } catch (e) { console.error(e); } }, 0); };   // a timer, not a frame: frames stop while the app is in the background
     try { new MutationObserver(later).observe(document.body, { childList: true, subtree: true }); } catch (e) { /* tables stay as they are */ }
