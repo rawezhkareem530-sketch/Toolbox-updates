@@ -2,7 +2,7 @@
 <html lang="ckb" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="tb-build" content="202611222229">
+<meta name="tb-build" content="202611222230">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#F4F4F6">
 <title>ToolBox</title>
@@ -1046,8 +1046,8 @@ tr.row-dim td .num,tr.row-dim td{opacity:.85}
 .topbar .tb-user{width:32px!important;height:32px!important;font-size:12.5px}
 .sale-head .btn,.sale-head .sale-cartbtn{height:38px!important;min-height:38px!important;border-radius:10px!important;box-sizing:border-box!important;padding-block:0!important;align-self:center!important;margin-block:0!important}
 .sale-head .sale-cartbtn{min-width:38px}
-.cc-dot{position:absolute;top:-3px;inset-inline-end:-3px;width:8px;height:8px;border-radius:50%;background:#34C759;box-shadow:0 0 0 2px var(--card)}
-.cc-dot.bad{background:#FF3B30}
+.cc-dot{position:absolute;top:-3px;inset-inline-end:-3px;width:8px;height:8px;border-radius:50%;background:#FF3B30;box-shadow:0 0 0 2px var(--card);display:none}
+.cc-dot.bad{display:block}
 .cc-pop{position:fixed;z-index:80;width:330px;max-width:calc(100vw - 16px);background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:0 16px 48px rgba(0,0,0,.18);padding:10px;display:flex;flex-direction:column;gap:7px}
 .cc-head{display:none;align-items:center;gap:8px;padding:2px 4px 6px}.cc-ttl{flex:1;font-size:17px}
 .cc-clock{flex:1;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}.cc-clock>b{font-size:20px;font-weight:700}.cc-clock>span{color:var(--muted);font-size:12.5px}
@@ -1154,6 +1154,8 @@ tr.row-dim td .num,tr.row-dim td{opacity:.85}
 .qs-nb.hidden{display:none}
 .qs-k{flex:none;font:500 11px/1 system-ui,"Segoe UI",sans-serif;color:var(--muted);background:none;border:none;padding:0}
 .tb-group{display:flex;align-items:center;gap:6px;flex:none}
+.tb-clock{display:none;font-size:13px;font-weight:600;color:var(--ink);white-space:nowrap;padding-inline:6px}
+@media (min-width:900px){ .is-fs .tb-clock{display:inline} }
 @media (min-width:900px){
   .topbar{display:flex;align-items:center;gap:8px;position:sticky;top:0;z-index:20;padding:8px 26px;background:var(--side);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--line);min-height:50px}
   .topbar [data-menu],.topbar .title{display:none}
@@ -16039,7 +16041,9 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
   });
   addEventListener('resize', () => { const p = $('#ntPanel'); if (p && !p.hidden) placePanel(); });
   try { if (window.ToolBoxHost && ToolBoxHost.notify) ToolBoxHost.notify.onClick(() => { if (ctx.user) openPanel(); }); } catch (e) { /* older Windows part */ }
-  function tbDate() { const d = new Date(), el = $('[data-tb-date]'); if (el) el.innerHTML = `${dayDate(d)} · <span class="num">${fTime(d)}</span>`; }
+  function tbDate() { const d = new Date(); $$('[data-tb-date]').forEach(el => { el.innerHTML = `<span class="num">${fDate(d)}</span> · <span class="num">${fTime(d)}</span>`; }); }
+  const fsCheck = () => document.documentElement.classList.toggle('is-fs', !!document.fullscreenElement || (innerWidth >= screen.width && innerHeight >= screen.height));   // full screen hides the Windows clock: show ours
+  document.addEventListener('fullscreenchange', fsCheck); addEventListener('resize', fsCheck); fsCheck();
   setInterval(() => { if (ctx.user) refreshBell(true); }, 60000);
   (function tick() { tbDate(); setTimeout(tick, 60000 - (Date.now() % 60000) + 50); })();   // time-based ones (held sale, open shift, backup)
   const LOOK_ACC = { blue: _t('شین'), purple: _t('مۆر'), pink: _t('پەمەیی'), red: _t('سوور'), orange: _t('پرتەقاڵی'), yellow: _t('زەرد'), green: _t('سەوز'), graphite: _t('خۆڵەمێشی') };
@@ -16772,12 +16776,12 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
       <div class="scrim" data-scrim></div>
       <div class="main-col" data-page-scroll>
         <header class="topbar"><button class="icon-btn" data-menu aria-label="${_t('مێنیو')}">${ic('menu')}</button><button type="button" class="icon-btn tb-home" data-apps-sw aria-haspopup="menu" aria-expanded="false" title="${_t('هەموو بەشەکان')}" aria-label="${_t('هەموو بەشەکان')}">${ic('grid')}</button><div class="title" data-title></div>
-          <span class="tb-sp"></span><div class="tb-group"><span data-rate-slot></span><button type="button" class="icon-btn tb-cc" data-cc title="${_t('کۆنترۆڵ سەنتەر')}" aria-label="${_t('کۆنترۆڵ سەنتەر')}">${ic('sliders')}<i class="cc-dot" data-cc-dot></i></button>${bellHTML()}</div>
+          <span class="tb-sp"></span><div class="tb-group"><span data-rate-slot></span><button type="button" class="icon-btn tb-cc" data-cc title="${_t('کۆنترۆڵ سەنتەر')}" aria-label="${_t('کۆنترۆڵ سەنتەر')}">${ic('sliders')}<i class="cc-dot" data-cc-dot></i></button>${bellHTML()}<span class="tb-clock ltr" data-tb-date></span></div>
           <button type="button" class="tb-user" data-user-menu style="background:${Login.colorFor(u)}" title="${esc(u.name)}" aria-label="${esc(u.name)}">${esc(Login.initials(u.name))}</button></header>
         <main class="main" id="view"></main>
       </div>
       <nav class="tabbar" style="grid-template-columns:repeat(${tabs.length},1fr)">
-        ${tabs.map(([k, i, l]) => `<a href="#/${k}" data-nav="${k}" class="${k === 'sale' ? 'sale' : ''}"><span class="tb-ic">${ic(i)}${k === 'dashboard' ? '' : `<span class="badge nav-nb hidden" data-navbadge="${k}"></span>`}</span>${l}</a>`).join('')}
+        ${tabs.map(([k, i, l]) => `<a href="#/${k}" data-nav="${k}" class="${k === 'sale' ? 'sale' : ''}"><span class="tb-ic">${ic(i)}${k === 'dashboard' ? '' : `<span class="badge nav-nb hidden" data-navbadge="${k === 'products' ? 'stock' : k}"></span>`}</span>${l}</a>`).join('')}
       </nav></div>`;
     $$('.side .nav a[data-nav]').forEach((a, i) => { if (i < 10) a.title += ` (Alt+${(i + 1) % 10})`; });
     if (PhoneSync.linked) PhoneSync.drawPill(); else HubPill.draw();
