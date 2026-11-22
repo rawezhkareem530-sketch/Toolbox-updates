@@ -2,7 +2,7 @@
 <html lang="ckb" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="tb-build" content="202611222230">
+<meta name="tb-build" content="202611222233">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#F4F4F6">
 <title>ToolBox</title>
@@ -1126,7 +1126,7 @@ tr.row-dim td .num,tr.row-dim td{opacity:.85}
   .apps-ui .topbar .title{display:flex;align-items:center;gap:8px;font-weight:700;font-size:16px;padding:5px 6px;user-select:none}
   .apps-ui .tb-home[aria-expanded=true]{background:var(--key)}
 }
-.apps-home{max-width:1000px;margin:10px auto 0}
+.apps-home{max-width:1000px;margin:24px auto 0}
 .ah-user{display:flex;align-items:center;gap:12px;margin-bottom:24px;flex-wrap:wrap}
 .ah-user .avatar{width:44px;height:44px;font-size:15px}
 .ah-hi{flex:1;display:flex;flex-direction:column;gap:2px;min-width:140px}.ah-hi b{font-size:17px}.ah-hi small{color:var(--muted)}
@@ -1140,10 +1140,10 @@ tr.row-dim td .num,tr.row-dim td{opacity:.85}
 .apps-pop a{display:flex;flex-direction:column;align-items:center;gap:7px;padding:12px 4px 10px;border-radius:12px;font-size:12.5px;font-weight:600;color:var(--ink);text-align:center;text-decoration:none}
 .apps-pop a:hover,.apps-pop a.on{background:var(--key)}
 .apps-pop .ah-ic{width:38px;height:38px;border-radius:11px}.apps-pop .ah-ic svg{width:19px;height:19px}
-.apps-pop.qs-list{display:block;width:250px;padding:6px;max-height:calc(100vh - 90px);overflow:auto;border-radius:12px}
-.qs-list .qs-g{font-size:11px;font-weight:600;color:var(--muted);padding:8px 10px 3px}
+.apps-pop.qs-list{display:block;width:230px;padding:6px;max-height:calc(100vh - 80px);overflow:auto;border-radius:12px;scrollbar-width:thin}
+.qs-list .qs-g{font-size:11px;font-weight:600;color:var(--muted);padding:6px 10px 2px}
 .qs-list .qs-g:first-child{padding-top:4px}
-.qs-list a{flex-direction:row;align-items:center;gap:10px;padding:6px 8px;border-radius:8px;font-size:13.5px;font-weight:500;text-align:start;outline:none}
+.qs-list a{flex-direction:row;align-items:center;gap:10px;padding:4px 8px;border-radius:8px;font-size:13.5px;font-weight:500;text-align:start;outline:none}
 .qs-list a:focus-visible{background:var(--key);box-shadow:inset 0 0 0 2px var(--accent)}
 .qs-list a.on{font-weight:700}
 .qs-ic{flex:none;width:24px;height:24px;border-radius:7px;display:grid;place-items:center;background:var(--t);color:#fff}
@@ -4795,6 +4795,17 @@ div[data-lang=ku] .rc,div[data-lang=ar] .rc,div[data-lang=ku] .inv,div[data-lang
 html[dir=ltr] .i-chev,html[dir=ltr] .i-back{scale:-1 1}
 @media (max-width:899px){ html[dir=ltr] .side{transform:translateX(-105%)} html[dir=ltr] .shell.menu .side{transform:none} }
 
+/* product cards like standard POS: picture on top, then name, price, stock */
+.pgrid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+.pgrid .pitem{padding:8px;gap:4px}
+.pgrid .pitem-top{flex-direction:column;align-items:stretch;gap:8px}
+.pgrid .pitem-top .thumb{width:100%!important;height:auto!important;aspect-ratio:4/3;object-fit:contain;border-radius:8px;background:#fff;display:block}
+.pgrid .pitem-top .thumb.ph{display:grid;place-items:center;background:var(--key)}
+.pgrid .pitem-top .thumb.ph svg{width:30px;height:30px}
+.pgrid .pitem-top .nm{-webkit-line-clamp:2;min-height:2.7em;line-height:1.35;font-size:13px;padding-inline-end:0!important}
+.pgrid .pitem-top .nm .nm-b{font-weight:500}
+.pgrid .pitem .pfav{top:12px!important;bottom:auto!important;inset-inline-end:12px!important;background:color-mix(in srgb,var(--card) 85%,transparent)}
+.cart.is-empty [data-cart-close]{display:none!important}
 </style>
 </head>
 <body>
@@ -8006,7 +8017,7 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
   const UNIT_KU = { piece: 'دانە', packet: 'پاکەت', box: 'قوتوو', carton: 'کارتۆن', dozen: 'دەرزەن', set: 'سێت', bag: 'کیسە', roll: 'ڕۆڵ', bolt: 'تۆپ', meter: 'مەتر', cm: 'سانتیمەتر', kg: 'کیلۆگرام', gram: 'گرام', ton: 'تەن', liter: 'لیتر', ml: 'میلیلیتر', pair: 'جووت' };
   const uName = u => (UNIT_KU[u] ? _t(UNIT_KU[u]) : '') || ((C.unitInfo && C.unitInfo(u)) || {}).name || '';
   const uab = u => UNIT_ABBR[u] || ((C.unitInfo && C.unitInfo(u)) || {}).abbr || uName(u);
-  const cuab = u => (matchMedia('(max-width:640px)').matches ? uName(u) || uab(u) : uab(u));
+  const cuab = u => uName(u) || uab(u);   // the cart says دانە / مەتر, like the cards
   const BASE_UNITS = ['piece', 'packet', 'box', 'carton', 'dozen', 'set', 'bag', 'roll', 'bolt', 'meter', 'cm', 'kg'];
   const DUR_NAMES = { days: _t('ڕۆژ'), months: _t('مانگ'), years: _t('ساڵ') };
   const fq = n => Number(n).toLocaleString('en-US', { maximumFractionDigits: 3 });
@@ -8848,7 +8859,7 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
       : !prods.length ? `<div class="card empty">${_t('هیچ کاڵایەک نەدۆزرایەوە')}</div>`
       : `<div class="pgrid">${saleBundles(q)}${prods.slice(0, saleShow).map((p, k) => `<button class="pitem ${p.fav ? 'is-fav' : ''} ${k === ctx.hiProd ? 'kb-hi' : ''}" data-add="${p.id}" title="${esc(p.name)}" ${sellable(p) ? '' : 'disabled'}>
           <span class="pfav ${p.fav ? 'on' : ''}" data-fav="${p.id}" role="button" title="${p.fav ? _t('لابردن لە دڵخوازەکان') : _t('دڵخواز: هەمیشە لە سەرەوە')}" aria-label="${_t('دڵخواز')}">${p.fav ? '★' : '☆'}</span>
-          <div class="pitem-top">${thumb(p)}<span class="nm">${esc(p.name)}${nameTag(p)}</span></div><span class="pr">${saleCardPrice(p)}</span>
+          <div class="pitem-top">${thumb(p)}<span class="nm">${esc(p.name)}${p.brand && p.name.toLowerCase().includes(p.brand.trim().toLowerCase()) ? '' : nameTag(p)}</span></div><span class="pr">${saleCardPrice(p)}</span>
           ${saleCardStock(p)}${promoBadge(p)}</button>`).join('')}</div>`
       + autoMoreHTML('sale', prods.length - saleShow)
       + (outHidden ? `<button type="button" class="sale-outs" data-showout><span class="num">${outHidden}</span> ${_t('کاڵای تەواوبوو شاردراونەتەوە · پیشاندان')}</button>` : ctx.showOut && !q && prods.some(p => !canSell(p)) ? `<button type="button" class="sale-outs" data-showout>${_t('شاردنەوەی تەواوبووەکان')}</button>` : '') };
@@ -8881,7 +8892,7 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
         <div class="cl-row">
           <div class="qty"><button data-q="-1" aria-label="${_t('کەمکردن')}">−</button><input name="qty" inputmode="${dec ? 'decimal' : 'numeric'}" value="${l.qty}" aria-label="${_t('بڕ')}"><button data-q="1" aria-label="${_t('زیادکردن')}">+</button></div>
           ${C.unitsOf(p).length > 1 ? `<select class="u-box" name="unit" aria-label="${_t('یەکە')}" title="${uName(l.unit)}">${C.unitsOf(p).map(u => `<option value="${u}" ${u === l.unit ? 'selected' : ''} title="${uName(u)}">${cuab(u)}</option>`).join('')}</select>` : `<span class="u-box" title="${uName(l.unit)}">${cuab(l.unit)}</span>`}
-          <div class="pstep ${x.changed ? 'changed' : ''}"><button type="button" data-pstep="-1" title="${_t('نرخ کەم بکەرەوە')} −${stT}" aria-label="${_t('کەمکردنی نرخ')}">−</button><input class="num" name="price" inputmode="decimal" value="${l.priceCur === 'USD' ? l.price : fmt(l.price)}" aria-label="${_t('نرخی یەک یەکە')}" title="↑ / ↓ = ${stT}"><button type="button" data-pstep="1" title="${_t('نرخ بەرز بکەرەوە')} +${stT}" aria-label="${_t('زیادکردنی نرخ')}">+</button></div>
+          <div class="pstep ${x.changed ? 'changed' : ''}"><input class="num" name="price" inputmode="decimal" value="${l.priceCur === 'USD' ? l.price : fmt(l.price)}" aria-label="${_t('نرخی یەک یەکە')}" title="↑ / ↓ = ${stT}"></div>
           ${l.priceCur !== MC() || C.defaultPrice(p, l.unit).cur !== MC() ? `<select class="cur-box" name="cur" aria-label="${_t('دراو')}"><option value="IQD" ${l.priceCur === 'IQD' ? 'selected' : ''}>IQD</option><option value="USD" ${l.priceCur === 'USD' ? 'selected' : ''}>$</option></select>` : ''}
         </div>
         ${pb}</div>`;
@@ -8907,14 +8918,14 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
       : `<button type="button" class="cdisc-add" data-cdisc-open>${ic('plus')}${_t('داشکاندن')}<kbd class="kbd">F8</kbd></button>`;
     const html = `
       ${C.db.settings.requireShift && !C.currentShift() ? `<div class="note warn" style="margin-bottom:10px">${ic('alert')}<span class="note-t">${_t('شیفت کراوە نییە — بۆ تۆمارکردنی فرۆشتن سەرەتا شیفت بکەرەوە.')}</span> ${can('shifts') ? `<a class="btn sm" href="#/shifts?open=1">${_t('کردنەوەی شیفت')}</a>` : ''}</div>` : ''}
-      <div class="pos-layout ${(ctx.cart.length || ctx.cartOpenEmpty) && !ctx.cartHidden ? '' : 'no-cart'}">
+      <div class="pos-layout ${(ctx.cart.length || ctx.cartOpenEmpty || !phoneCart()) && !ctx.cartHidden ? '' : 'no-cart'}">
         <div>
           <div class="sale-head"><h1>${T.nav.sale}</h1>
             ${catSel}<div class="search">${ic('search')}<kbd class="kbd in-search">F2</kbd><input class="f" id="psearch" placeholder="${phoneCart() ? _t('ناو، بارکۆد یان پۆل…') : _t('ناو، بارکۆد یان پۆل… (Enter بۆ زیادکردن)')}" aria-keyshortcuts="F2" value="${esc(ctx.cartSearch)}" autocomplete="off"></div>${Cam.show() ? `<button type="button" class="btn cam-btn" data-cam aria-label="${_t('خوێندنەوە بە کامێرا')}">${ic('camera')}</button>` : ''}
-            ${(ctx.cart.length || ctx.cartOpenEmpty) && !ctx.cartHidden ? '' : `<button type="button" class="sale-cartbtn" data-opencart title="${_t('سەبەتە')}" aria-label="${_t('سەبەتە')}">${ic('cart')}${ctx.cart.length ? `<span class="num">${ctx.cart.length}</span>` : ''}</button>`}
             <button type="button" class="btn ghost sale-quick" data-quick title="${_t('کاڵایەک کە لە لیستدا نییە (F4)')}">${ic('plus')}<span>${_t('کاڵای خێرا')}</span><kbd class="kbd">F4</kbd></button>
             ${lastSaleOfMine() ? `<button type="button" class="btn ghost" data-lastrc title="${_t('چاپی دووبارەی پسوڵەی')} #${docNo(lastSaleOfMine().id)}">${ic('printer')}${_t('دوایین پسوڵە')}</button>` : ''}
-            ${held.length ? `<button class="btn ghost" data-held>${ic('clock')}${_t('هەڵگیراو')} <span class="badge" style="background:var(--warn)">${held.length}</span></button>` : ''}</div>
+            ${held.length ? `<button class="btn ghost" data-held>${ic('clock')}${_t('هەڵگیراو')} <span class="badge" style="background:var(--warn)">${held.length}</span></button>` : ''}
+            ${(ctx.cart.length || ctx.cartOpenEmpty || !phoneCart()) && !ctx.cartHidden ? '' : `<button type="button" class="sale-cartbtn" data-opencart title="${_t('سەبەتە')}" aria-label="${_t('سەبەتە')}">${ic('cart')}${ctx.cart.length ? `<span class="num">${ctx.cart.length}</span>` : ''}</button>`}</div>
           ${catChips}
           <div class="pscroll">${grid}</div>
         </div>
@@ -10770,7 +10781,7 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
     const pKey = params.toString(); if (ctx.pShowKey !== pKey) { ctx.pShowKey = pKey; ctx.pShow = 90; }
     const shown = list.slice(0, ctx.pShow || 90), pMore = autoMoreHTML('products', list.length - shown.length);
     const cardsHTML = () => `<div class="pgrid pv-grid">${shown.map(p => `<div class="pitem ${manage ? 'click' : ''}${selC(p)}${p.archived ? ' p-arch' : ''}" data-p="${p.id}" ${manage ? 'tabindex="0" role="button"' : ''} title="${esc(p.name)}">
-        <div class="pitem-top">${thumb(p)}<span class="nm">${esc(p.name)}${nameTag(p)}</span></div>
+        <div class="pitem-top">${thumb(p)}<span class="nm">${esc(p.name)}${p.brand && p.name.toLowerCase().includes(p.brand.trim().toLowerCase()) ? '' : nameTag(p)}</span></div>
         <span class="pr">${saleCardPrice(p)}</span>
         <div class="pc-foot">${saleCardStock(p)}</div><div class="pc-chips">${promoBadge(p)}${marginChip(p)}${p.warranty ? `<span class="pc-chip info">${_t('گەرەنتی')} ${warrantyText(p.warranty)}</span>` : ''}${expChip(p)}</div></div>`).join('')}</div>`;
     const html = `
@@ -16599,14 +16610,13 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
   }
   const APP_TONE = { sell: '#34C759', goods: '#FF9500', people: '#007AFF', money: '#AF52DE', system: '#8E8E93' };
   const appTiles = cur => NAV.flatMap(([g, list]) => list.filter(([, , perm]) => !perm || can(perm)).map(([k, i]) => `<a class="ah-app${k === cur ? ' on' : ''}" href="#/${k}" style="--t:${APP_TONE[g]}"><span class="ah-ic">${ic(i)}<span class="badge nav-nb hidden" data-navbadge="${k}"></span></span><span class="ah-t">${T.nav[k]}</span></a>`)).join('');
-  const qsList = cur => { let n = 0;   // the quick switch: a short grouped list, with the Alt shortcut of each section
+  const qsList = cur => {   // the quick switch: a short grouped list (Alt+1…9 still work, not shown)
     return `<a role="menuitem" class="${cur === 'apps' ? 'on' : ''}" href="#/apps" style="--t:${APP_TONE.system}"><span class="qs-ic">${ic('grid')}</span><span class="qs-t">${_t('هەموو بەشەکان')}</span></a>` + NAV.map(([g, list]) => { const ok = list.filter(([, , perm]) => !perm || can(perm)); if (!ok.length) return '';
-      return `<div class="qs-g">${T.navGroups[g]}</div>` + ok.map(([k, i]) => { n++; const key = n <= 9 ? n : n === 10 ? 0 : null;
-        return `<a role="menuitem" class="${k === cur ? 'on' : ''}" href="#/${k}" style="--t:${APP_TONE[g]}"><span class="qs-ic">${ic(i)}</span><span class="qs-t">${T.nav[k]}</span><span class="badge qs-nb hidden" data-qsbadge="${k}"></span>${key !== null ? `<kbd class="qs-k ltr">Alt+${key}</kbd>` : ''}</a>`; }).join(''); }).join(''); };
+      return `<div class="qs-g">${T.navGroups[g]}</div>` + ok.map(([k, i]) => {
+        return `<a role="menuitem" class="${k === cur ? 'on' : ''}" href="#/${k}" style="--t:${APP_TONE[g]}"><span class="qs-ic">${ic(i)}</span><span class="qs-t">${T.nav[k]}</span><span class="badge qs-nb hidden" data-qsbadge="${k}"></span></a>`; }).join(''); }).join(''); };
   pages.apps = () => {
     const u = ctx.user;
     return { title: _t('هەموو بەشەکان'), html: `<div class="apps-home">
-      <div class="ah-hello">${_t('بەخێربێیتەوە')}، ${esc(u.name.split(' ')[0])}</div>
       <div class="ah-grid">${appTiles('')}</div></div>` };
   };
   const ROUTE_PERM = { stock: 'products', activity: 'users', sale: 'sell', sales: 'sell', shifts: 'shifts', customers: 'customers', suppliers: 'suppliers', purchases: 'purchases', expenses: 'expenses', reports: 'reports', settings: 'settings', users: 'users' };
@@ -16812,7 +16822,8 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
       btn.setAttribute('aria-expanded', 'true');
       const pop = document.createElement('div'); pop.className = 'apps-pop qs-list'; pop.setAttribute('role', 'menu'); pop.innerHTML = qsList(route().name);
       document.body.appendChild(pop); paintNavBadges(); const r = e.currentTarget.getBoundingClientRect();
-      pop.style.top = (r.bottom + 6) + 'px'; pop.style.right = Math.max(12, innerWidth - r.right) + 'px';
+      pop.style.top = (r.bottom + 6) + 'px';   // opens under ⊞, on the side ⊞ is on (Kurdish: right, English: left), never off screen
+      if (document.documentElement.dir === 'rtl') pop.style.right = Math.max(12, innerWidth - r.right) + 'px'; else pop.style.left = Math.max(12, Math.min(r.left, innerWidth - pop.offsetWidth - 12)) + 'px';
       const links = $$('a', pop); (links.find(a => a.classList.contains('on')) || links[0]).focus({ preventScroll: true });
       const off = ev => {
         if (ev.type === 'keydown' && (ev.key === 'ArrowDown' || ev.key === 'ArrowUp' || ev.key === 'Home' || ev.key === 'End')) {   // move through the list
