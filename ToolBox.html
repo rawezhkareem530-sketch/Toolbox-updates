@@ -2,7 +2,7 @@
 <html lang="ckb" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="tb-build" content="202611221840">
+<meta name="tb-build" content="202611221915">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#F4F4F6">
 <title>ToolBox</title>
@@ -1038,6 +1038,30 @@ tr.row-dim td .num,tr.row-dim td{opacity:.85}
 .help>svg{width:13px;height:13px;vertical-align:-2px}
 
 .tb-date{display:none}
+.tb-home{display:none}
+@media (min-width:900px){
+  .apps-ui .shell{grid-template-columns:1fr}
+  .apps-ui .shell>.side,.apps-ui .shell>.scrim{display:none}
+  .apps-ui .tb-home{display:grid}
+  .apps-ui .topbar .title{display:flex;align-items:center;gap:8px;font-weight:700;font-size:16px;cursor:pointer;padding:5px 10px;border-radius:10px;user-select:none}
+  .apps-ui .topbar .title:hover{background:var(--key)}
+  .apps-ui .topbar .title::after{content:'';width:6px;height:6px;border:solid var(--muted);border-width:0 2px 2px 0;transform:translateY(-2px) rotate(45deg)}
+  .apps-ui body[data-page=apps] .topbar .title{cursor:default}.apps-ui body[data-page=apps] .topbar .title:hover{background:none}.apps-ui body[data-page=apps] .topbar .title::after{display:none}
+}
+.apps-home{max-width:1000px;margin:10px auto 0}
+.ah-user{display:flex;align-items:center;gap:12px;margin-bottom:24px;flex-wrap:wrap}
+.ah-user .avatar{width:44px;height:44px;font-size:15px}
+.ah-hi{flex:1;display:flex;flex-direction:column;gap:2px;min-width:140px}.ah-hi b{font-size:17px}.ah-hi small{color:var(--muted)}
+.ah-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:16px}
+.ah-app{display:flex;flex-direction:column;align-items:center;gap:12px;padding:24px 10px 18px;background:var(--card);border:1px solid var(--line);border-radius:18px;color:var(--ink);font-weight:600;font-size:14px;text-align:center;text-decoration:none;transition:transform .12s ease,box-shadow .12s ease}
+.ah-app:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.ah-ic{position:relative;width:58px;height:58px;border-radius:17px;display:grid;place-items:center;background:var(--t);color:#fff}
+.ah-ic svg{width:27px;height:27px}
+.ah-ic .badge{position:absolute;top:-7px;inset-inline-end:-7px}
+.apps-pop{position:fixed;z-index:60;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:8px;display:grid;grid-template-columns:repeat(4,1fr);gap:4px;width:440px;max-width:calc(100vw - 24px)}
+.apps-pop a{display:flex;flex-direction:column;align-items:center;gap:7px;padding:12px 4px 10px;border-radius:12px;font-size:12.5px;font-weight:600;color:var(--ink);text-align:center;text-decoration:none}
+.apps-pop a:hover,.apps-pop a.on{background:var(--key)}
+.apps-pop .ah-ic{width:38px;height:38px;border-radius:11px}.apps-pop .ah-ic svg{width:19px;height:19px}
 .tb-group{display:flex;align-items:center;gap:6px;flex:none}
 @media (min-width:900px){
   .topbar{display:flex;align-items:center;gap:8px;position:sticky;top:0;z-index:20;padding:8px 26px;background:var(--side);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--line);min-height:50px}
@@ -7861,6 +7885,7 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
     devices: '<rect x="2" y="4" width="14" height="10" rx="1.6"/><path d="M6 18h6M9 14v4"/><rect x="16.5" y="8" width="5.5" height="12" rx="1.4"/>',
     pin: '<path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/>',
     barcode: '<path d="M4 5v14M7 5v14M11 5v14M14 5v14M17 5v14M20 5v14"/>',
+    grid: '<rect x="4" y="4" width="6.5" height="6.5" rx="1.6"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.6"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.6"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.6"/>',
     printer: '<path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/>',
     undo: '<path d="M9 14 4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/>',
     bulb: '<path d="M9 2h6l-1 6h3l-6 9v-6H8z"/><path d="M10 21h4"/>',
@@ -15144,7 +15169,7 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
           if (lb) {
             const flagL = () => { const sc = $('[data-sec="look"]', root), f = sc && $('[data-flag]', sc), sm = sc && $('[data-sum]', sc); if (sm) sm.innerHTML = SUM.look(); if (f) { f.classList.remove('show'); void f.offsetWidth; f.classList.add('show'); } };
             lb.addEventListener('change', e => {
-              const t = e.target, map = { lkMode: 'mode', lkBy: 'by', lkAcc: 'accent', lkSize: 'size', lkFrom: 'from', lkTo: 'to' };
+              const t = e.target, map = { lkMode: 'mode', lkBy: 'by', lkAcc: 'accent', lkSize: 'size', lkFrom: 'from', lkTo: 'to', lkUi: 'ui' };
               if (!map[t.name]) return;
               Look.set(map[t.name], t.value);
               $('[data-lk-auto]', lb).hidden = Look.prefs.mode !== 'auto'; $('[data-lk-time]', lb).hidden = !(Look.prefs.mode === 'auto' && Look.prefs.by === 'time');
@@ -15495,7 +15520,7 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
   const Look = (() => {
     const KEY = 'tbpos_look'; let p = null;
     try { p = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) { p = null; }
-    p = Object.assign({ mode: 'auto', by: 'system', from: '18:00', to: '06:00', accent: 'orange', size: 'n' }, p || {});
+    p = Object.assign({ mode: 'auto', by: 'system', from: '18:00', to: '06:00', accent: 'orange', size: 'n', ui: 'apps' }, p || {});
     const ACCS = { blue: ['#007AFF', '#0A84FF'], purple: ['#A550A7', '#B062B2'], pink: ['#F74F9E', '#F85FA7'], red: ['#E0383E', '#EF4A50'], orange: ['#F7821B', '#F88B2C'], yellow: ['#FFC600', '#FFCC1A'], green: ['#62BA46', '#6CC24F'], graphite: ['#8C8C8C', '#989898'] };
     const ACC = Object.fromEntries(Object.entries(ACCS).map(([k, v]) => [k, v[0]]));
     const SIZE = { n: 1, l: 1.08, xl: 1.16 };
@@ -15530,6 +15555,7 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
       const fi = document.querySelector('link[rel=icon]'); if (fi) { const h = fi.href.replace(/%23[0-9A-Fa-f]{6}/g, encodeURIComponent(ACCS[key][dark ? 1 : 0])); if (h !== fi.href) fi.href = h; }
       document.documentElement.style.zoom = SIZE[p.size] && SIZE[p.size] !== 1 ? SIZE[p.size] : '';
       document.documentElement.style.setProperty('--z', SIZE[p.size] || 1);
+      document.documentElement.classList.toggle('apps-ui', p.ui !== 'side');   // one section at a time (like Odoo) or the side menu
     }
     sys.addEventListener('change', () => { if (p.mode === 'auto' && p.by === 'system') apply(); });
     setInterval(() => { if (p.mode === 'auto' && p.by === 'time') apply(); }, 60000);
@@ -15929,6 +15955,8 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
       <div class="sr sr-w"><div class="sr-c lk-modes" role="radiogroup" aria-label="${_t('دۆخ')}">${[['light', _t('ڕووناک')], ['dark', _t('تاریک')], ['auto', _t('خۆکار')]].map(([k, l]) => `<label class="lk-m"><input type="radio" name="lkMode" value="${k}" ${L.mode === k ? 'checked' : ''}>${thumb(k)}<b>${l}</b></label>`).join('')}</div></div>
       ${row(_t('خۆکار بە پێی'), `<div class="mseg lk-seg" role="radiogroup">${[['system', _t('ویندۆز / مۆبایل')], ['time', _t('کات')]].map(([k, l]) => `<label><input type="radio" name="lkBy" value="${k}" ${L.by === k ? 'checked' : ''}><span>${l}</span></label>`).join('')}</div>`, `data-lk-auto ${L.mode === 'auto' ? '' : 'hidden'}`)}
       ${row(_t('تاریک لە'), `<div class="lk-time"><input class="f num" type="time" name="lkFrom" value="${esc(L.from)}"><span>${_t('تا')}</span><input class="f num" type="time" name="lkTo" value="${esc(L.to)}"></div>`, `data-lk-time ${L.mode === 'auto' && L.by === 'time' ? '' : 'hidden'}`)}
+    </div><h5 class="sg">${_t('شێوازی ئەپ')}</h5><div class="sc">
+      ${row(_t('مێنیو'), `<div class="mseg lk-seg" role="radiogroup">${[['apps', _t('بەشەکان (یەک بەش لە یەک کاتدا)')], ['side', _t('مێنیوی لاتەنیشت')]].map(([k, l]) => `<label><input type="radio" name="lkUi" value="${k}" ${(L.ui || 'apps') === k ? 'checked' : ''}><span>${l}</span></label>`).join('')}</div>`)}
     </div><h5 class="sg">${_t('ڕەنگ و نووسین')}</h5><div class="sc">
       ${row(_t('ڕەنگی سەرەکی'), `<div class="lk-accs" role="radiogroup" aria-label="${_t('ڕەنگی سەرەکی')}">${Object.keys(Look.ACC).map(k => `<label class="lk-acc" title="${LOOK_ACC[k]}"><input type="radio" name="lkAcc" value="${k}" ${L.accent === k ? 'checked' : ''} aria-label="${LOOK_ACC[k]}"><span style="--c:${Look.ACC[k]}"></span></label>`).join('')}</div>`)}
       ${row(_t('قەبارەی نووسین'), `<div class="mseg lk-seg lk-size" role="radiogroup" aria-label="${_t('قەبارەی نووسین')}">${[['n', 13, _t('ئاسایی')], ['l', 16, _t('گەورە')], ['xl', 19, _t('زۆر گەورە')]].map(([k, px, l]) => `<label title="${l}"><input type="radio" name="lkSize" value="${k}" ${L.size === k ? 'checked' : ''} aria-label="${l}"><span style="font-size:${px}px">A</span></label>`).join('')}</div>`)}
@@ -16380,6 +16408,16 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
     ['money', [['shifts', 'clock', 'shifts'], ['expenses', 'wallet', 'expenses'], ['reports', 'chart', 'reports']]],
     ['system', [['activity', 'list', 'users'], ['settings', 'gear', 'settings']]]
   ];
+  const APP_TONE = { sell: '#34C759', goods: '#FF9500', people: '#007AFF', money: '#AF52DE', system: '#8E8E93' };
+  const appTiles = cur => NAV.flatMap(([g, list]) => list.filter(([, , perm]) => !perm || can(perm)).map(([k, i]) => `<a class="ah-app${k === cur ? ' on' : ''}" href="#/${k}" style="--t:${APP_TONE[g]}"><span class="ah-ic">${ic(i)}<span class="badge nav-nb hidden" data-navbadge="${k}"></span></span><span class="ah-t">${T.nav[k]}</span></a>`)).join('');
+  pages.apps = () => {
+    const u = ctx.user;
+    return { title: _t('هەموو بەشەکان'), html: `<div class="apps-home">
+      <div class="ah-user"><div class="avatar" style="background:${Login.colorFor(u)}">${esc(Login.initials(u.name))}</div><div class="ah-hi"><b>${esc(u.name)}</b><small>${ROLES[u.role]}</small></div>
+        <button type="button" class="btn ghost sm" data-ah-pin>${ic('key')}${_t('گۆڕینی کۆدی نهێنی')}</button><button type="button" class="btn ghost sm" data-ah-out>${ic('logout')}${_t('چوونەدەرەوە')}</button></div>
+      <div class="ah-grid">${appTiles('')}</div></div>`,
+      mount(root) { $('[data-ah-pin]', root).onclick = () => $('[data-mypin]').click(); $('[data-ah-out]', root).onclick = () => $('[data-logout]').click(); } };
+  };
   const ROUTE_PERM = { stock: 'products', activity: 'users', sale: 'sell', sales: 'sell', shifts: 'shifts', customers: 'customers', suppliers: 'suppliers', purchases: 'purchases', expenses: 'expenses', reports: 'reports', settings: 'settings', users: 'users' };
   function route() {
     const h = currentPath.replace(/^\/?/, ''); const [name, q] = h.split('?');
@@ -16546,7 +16584,7 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
       </aside>
       <div class="scrim" data-scrim></div>
       <div class="main-col" data-page-scroll>
-        <header class="topbar"><button class="icon-btn" data-menu aria-label="${_t('مێنیو')}">${ic('menu')}</button><div class="title" data-title></div>
+        <header class="topbar"><button class="icon-btn" data-menu aria-label="${_t('مێنیو')}">${ic('menu')}</button><a class="icon-btn tb-home" href="#/apps" data-nav="apps" title="${_t('هەموو بەشەکان')}" aria-label="${_t('هەموو بەشەکان')}">${ic('grid')}</a><div class="title" data-title data-apps-sw></div>
           <button class="icon-btn tb-fs" data-fullscreen title="${_t('پڕبەشاشە (F11)')}" aria-label="${_t('پڕبەشاشە')}">${ic(document.fullscreenElement ? 'shrink' : 'expand')}</button><div class="tb-group"><button class="icon-btn tb-theme" data-theme-toggle title="${Look.isDark() ? _t('دۆخی ڕووناک') : _t('دۆخی تاریک')}" aria-label="${Look.isDark() ? _t('دۆخی ڕووناک') : _t('دۆخی تاریک')}">${ic(Look.isDark() ? 'sun' : 'moon')}</button><span class="sync-slot" data-sync-slot></span><span data-shift-slot></span><span data-rate-slot></span>${bellHTML()}</div>
           <div class="tb-date" data-tb-date></div></header>
         <main class="main" id="view"></main>
@@ -16563,6 +16601,15 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
     $('[data-scrim]').onclick = () => sh.classList.remove('menu');
     $('.side').addEventListener('click', e => { if (e.target.closest('a')) sh.classList.remove('menu'); });
     $('[data-mypin]').onclick = () => pinForm(Users.byId(ctx.user.id), true);
+    $('[data-apps-sw]').onclick = e => {   // the section's name opens the other sections
+      if (!document.documentElement.classList.contains('apps-ui') || innerWidth < 900 || route().name === 'apps') return;
+      const old = $('.apps-pop'); if (old) { old.remove(); return; }
+      const pop = document.createElement('div'); pop.className = 'apps-pop'; pop.innerHTML = appTiles(route().name);
+      document.body.appendChild(pop); const r = e.currentTarget.getBoundingClientRect();
+      pop.style.top = (r.bottom + 6) + 'px'; pop.style.right = Math.max(12, innerWidth - r.right) + 'px';
+      const off = ev => { if (ev.type === 'keydown' && ev.key !== 'Escape') return; if (ev.type === 'click' && ev.target.closest('[data-apps-sw]')) return; pop.remove(); document.removeEventListener('click', off, true); document.removeEventListener('keydown', off, true); };
+      setTimeout(() => { document.addEventListener('click', off, true); document.addEventListener('keydown', off, true); });
+    };
     $('[data-logout]').onclick = () => {
       $$('.modal-bg').forEach(x => x.remove());
       closePanel(); closeRatePop(); $$('.nt-pop').forEach(x => x.remove());
