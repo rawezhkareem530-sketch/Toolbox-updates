@@ -2,7 +2,7 @@
 <html lang="ckb" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="tb-build" content="202611222227">
+<meta name="tb-build" content="202611222228">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#F4F4F6">
 <title>ToolBox</title>
@@ -1142,6 +1142,19 @@ tr.row-dim td .num,tr.row-dim td{opacity:.85}
 .apps-pop a{display:flex;flex-direction:column;align-items:center;gap:7px;padding:12px 4px 10px;border-radius:12px;font-size:12.5px;font-weight:600;color:var(--ink);text-align:center;text-decoration:none}
 .apps-pop a:hover,.apps-pop a.on{background:var(--key)}
 .apps-pop .ah-ic{width:38px;height:38px;border-radius:11px}.apps-pop .ah-ic svg{width:19px;height:19px}
+.apps-pop.qs-list{display:block;width:250px;padding:6px;max-height:calc(100vh - 90px);overflow:auto;border-radius:12px}
+.qs-list .qs-g{font-size:11px;font-weight:600;color:var(--muted);padding:8px 10px 3px}
+.qs-list .qs-g:first-child{padding-top:4px}
+.qs-list a{flex-direction:row;align-items:center;gap:10px;padding:6px 8px;border-radius:8px;font-size:13.5px;font-weight:500;text-align:start;outline:none}
+.qs-list a:focus-visible{background:var(--key);box-shadow:inset 0 0 0 2px var(--accent)}
+.qs-list a.on{font-weight:700}
+.qs-ic{flex:none;width:24px;height:24px;border-radius:7px;display:grid;place-items:center;background:var(--t);color:#fff}
+.qs-ic svg{width:14px;height:14px}
+.qs-t{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.qs-nb{flex:none;background:var(--danger);color:#fff;min-width:18px;height:18px;font-size:11px;padding:0 5px;border:none}
+.qs-nb.lv-warn{background:var(--warn)}
+.qs-nb.hidden{display:none}
+.qs-k{flex:none;font:500 11px/1 system-ui,"Segoe UI",sans-serif;color:var(--muted);background:none;border:none;padding:0}
 .tb-group{display:flex;align-items:center;gap:6px;flex:none}
 @media (min-width:900px){
   .topbar{display:flex;align-items:center;gap:8px;position:sticky;top:0;z-index:20;padding:8px 26px;background:var(--side);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--line);min-height:50px}
@@ -15729,12 +15742,17 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
     AppBadge(b);
     const per = {}; Notif.visible().forEach(n => { const sb = stateBadge(n); if (!sb) return; const o = per[sb.k] || (per[sb.k] = { c: 0, lvl: 0, list: [] }); o.c += sb.c; o.lvl = Math.max(o.lvl, NRANK[n.level] >= 3 ? 3 : 2); o.list.push(n); });
     navNotifs = per;
-    $$('[data-navbadge]').forEach(x => { const o = per[x.dataset.navbadge]; x.textContent = o ? (o.c > 99 ? '99+' : o.c) : ''; x.classList.toggle('hidden', !o);
-      x.classList.toggle('lv-warn', !!o && o.lvl === 2); x.classList.toggle('lv-info', !!o && o.lvl < 2);
-      x.removeAttribute('title'); x.setAttribute('aria-label', o ? _tf('{0} کاری ماوە', o.c) : ''); x.setAttribute('role', o ? 'button' : ''); x.tabIndex = o ? 0 : -1; });
+    paintNavBadges();
     const np = $('#navPop'); if (np && !np.hidden) { const k = np.dataset.page; if (navNotifs[k]) renderNavPop(k); else closeNavPop(); }
     $$('[data-bell]').forEach(x => { x.classList.toggle('has-unread', u > 0); x.setAttribute('aria-label', `${_t('ئاگادارکردنەوەکان')}${u ? _tf(' · {0} نەخوێندراوە', u) : ''}`); });
     const p = $('#ntPanel'); if (p && !p.hidden) renderPanel();
+  }
+  function paintNavBadges() {
+    const per = navNotifs;
+    $$('[data-qsbadge]').forEach(x => { const o = per[x.dataset.qsbadge]; x.textContent = o ? (o.c > 99 ? '99+' : o.c) : ''; x.classList.toggle('hidden', !o); x.classList.toggle('lv-warn', !!o && o.lvl === 2); });
+    $$('[data-navbadge]').forEach(x => { const o = per[x.dataset.navbadge]; x.textContent = o ? (o.c > 99 ? '99+' : o.c) : ''; x.classList.toggle('hidden', !o);
+      x.classList.toggle('lv-warn', !!o && o.lvl === 2); x.classList.toggle('lv-info', !!o && o.lvl < 2);
+      x.removeAttribute('title'); x.setAttribute('aria-label', o ? _tf('{0} کاری ماوە', o.c) : ''); x.setAttribute('role', o ? 'button' : ''); x.tabIndex = o ? 0 : -1; });
   }
   function ntItem(n) {
     const menu = ntOpenMenu === n.key;
@@ -16579,6 +16597,10 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
   }
   const APP_TONE = { sell: '#34C759', goods: '#FF9500', people: '#007AFF', money: '#AF52DE', system: '#8E8E93' };
   const appTiles = cur => NAV.flatMap(([g, list]) => list.filter(([, , perm]) => !perm || can(perm)).map(([k, i]) => `<a class="ah-app${k === cur ? ' on' : ''}" href="#/${k}" style="--t:${APP_TONE[g]}"><span class="ah-ic">${ic(i)}<span class="badge nav-nb hidden" data-navbadge="${k}"></span></span><span class="ah-t">${T.nav[k]}</span></a>`)).join('');
+  const qsList = cur => { let n = 0;   // the quick switch: a short grouped list, with the Alt shortcut of each section
+    return NAV.map(([g, list]) => { const ok = list.filter(([, , perm]) => !perm || can(perm)); if (!ok.length) return '';
+      return `<div class="qs-g">${T.navGroups[g]}</div>` + ok.map(([k, i]) => { n++; const key = n <= 9 ? n : n === 10 ? 0 : null;
+        return `<a role="menuitem" class="${k === cur ? 'on' : ''}" href="#/${k}" style="--t:${APP_TONE[g]}"><span class="qs-ic">${ic(i)}</span><span class="qs-t">${T.nav[k]}</span><span class="badge qs-nb hidden" data-qsbadge="${k}"></span>${key !== null ? `<kbd class="qs-k ltr">Alt+${key}</kbd>` : ''}</a>`; }).join(''); }).join(''); };
   pages.apps = () => {
     const u = ctx.user;
     return { title: _t('هەموو بەشەکان'), html: `<div class="apps-home">
@@ -16784,10 +16806,16 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
     $('[data-apps-sw]').onclick = e => {   // the section's name opens the other sections
       if (!document.documentElement.classList.contains('apps-ui') || innerWidth < 900 || route().name === 'apps') return;
       const old = $('.apps-pop'); if (old) { old.remove(); return; }
-      const pop = document.createElement('div'); pop.className = 'apps-pop'; pop.innerHTML = appTiles(route().name);
-      document.body.appendChild(pop); const r = e.currentTarget.getBoundingClientRect();
+      const pop = document.createElement('div'); pop.className = 'apps-pop qs-list'; pop.setAttribute('role', 'menu'); pop.innerHTML = qsList(route().name);
+      document.body.appendChild(pop); paintNavBadges(); const r = e.currentTarget.getBoundingClientRect();
       pop.style.top = (r.bottom + 6) + 'px'; pop.style.right = Math.max(12, innerWidth - r.right) + 'px';
-      const off = ev => { if (ev.type === 'keydown' && ev.key !== 'Escape') return; if (ev.type === 'click' && ev.target.closest('[data-apps-sw]')) return; pop.remove(); document.removeEventListener('click', off, true); document.removeEventListener('keydown', off, true); };
+      const links = $$('a', pop); (links.find(a => a.classList.contains('on')) || links[0]).focus({ preventScroll: true });
+      const off = ev => {
+        if (ev.type === 'keydown' && (ev.key === 'ArrowDown' || ev.key === 'ArrowUp' || ev.key === 'Home' || ev.key === 'End')) {   // move through the list
+          ev.preventDefault(); ev.stopPropagation(); const i = links.indexOf(document.activeElement), n = links.length;
+          const to = ev.key === 'Home' ? 0 : ev.key === 'End' ? n - 1 : i < 0 ? 0 : (i + (ev.key === 'ArrowDown' ? 1 : -1) + n) % n; links[to].focus(); return; }
+        if (ev.type === 'keydown' && ev.key === 'Enter' && pop.contains(document.activeElement)) { ev.preventDefault(); ev.stopPropagation(); document.activeElement.click(); return; }
+        if (ev.type === 'keydown' && ev.key !== 'Escape') return; if (ev.type === 'click' && ev.target.closest('[data-apps-sw]')) return; pop.remove(); document.removeEventListener('click', off, true); document.removeEventListener('keydown', off, true); };
       setTimeout(() => { document.addEventListener('click', off, true); document.addEventListener('keydown', off, true); });
     };
     $('[data-logout]').onclick = () => {
