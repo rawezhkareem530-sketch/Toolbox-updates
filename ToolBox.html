@@ -2,7 +2,7 @@
 <html lang="ckb" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="tb-build" content="202611222130">
+<meta name="tb-build" content="202611222140">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#F4F4F6">
 <title>ToolBox</title>
@@ -4781,45 +4781,6 @@ div[data-lang=ku] .rc,div[data-lang=ar] .rc,div[data-lang=ku] .inv,div[data-lang
 html[dir=ltr] .i-chev,html[dir=ltr] .i-back{scale:-1 1}
 @media (max-width:899px){ html[dir=ltr] .side{transform:translateX(-105%)} html[dir=ltr] .shell.menu .side{transform:none} }
 
-/* ===== iOS / iPadOS look (Settings › Look › Style), on top of the macOS one ===== */
-html.st-ios{--bg:#F2F2F7;--card:#FFFFFF;--line:rgba(60,60,67,.13);--key:rgba(118,118,128,.12);--key-hover:rgba(118,118,128,.18);--radius:20px;--shadow:none;--side:rgba(249,249,251,.72)}
-html.st-ios[data-theme=dark]{--bg:#000000;--card:#1C1C1E;--line:rgba(84,84,88,.45);--key:rgba(118,118,128,.24);--key-hover:rgba(118,118,128,.32);--side:rgba(28,28,30,.7)}
-html.st-ios body{font-size:15px}
-html.st-ios .card{border:none;box-shadow:none;border-radius:20px}
-html.st-ios .btn{min-height:44px;border-radius:12px;padding:0 18px;font-weight:600;font-size:15px;background:var(--accent);box-shadow:none;border:none}
-html.st-ios .btn:hover{background:var(--accent);filter:brightness(1.05)}
-html.st-ios .btn.ghost{background:var(--key);color:var(--accent);box-shadow:none}
-html.st-ios .btn.ghost:hover{background:var(--key-hover);filter:none}
-html.st-ios .btn.sm{min-height:36px;border-radius:10px;padding:0 14px;font-size:14px}
-html.st-ios input.f,html.st-ios select.f,html.st-ios textarea.f{min-height:44px;border-radius:12px;border:none;background:var(--key);box-shadow:none;font-size:15px;padding-inline:14px}
-html.st-ios input.f:focus,html.st-ios select.f:focus,html.st-ios textarea.f:focus{box-shadow:0 0 0 2px var(--accent);background:var(--card)}
-html.st-ios .seg{background:var(--key);border-radius:10px;padding:2px}
-html.st-ios .seg button{border-radius:8px;padding:6px 14px;font-size:14px}
-html.st-ios .seg button.on{background:var(--card);box-shadow:0 3px 8px rgba(0,0,0,.12),0 0 0 .5px rgba(0,0,0,.04)}
-html.st-ios[data-theme=dark] .seg button.on{background:#636366}
-html.st-ios .modal{border-radius:26px}
-html.st-ios table.t th{font-size:13px}
-html.st-ios table.t td{padding-block:12px}
-html.st-ios table.t tbody tr:nth-child(even) td{background:transparent}
-html.st-ios table.t tbody tr td{border-bottom:.5px solid var(--line)}
-html.st-ios .topbar{background:rgba(249,249,251,.62)!important;-webkit-backdrop-filter:blur(30px) saturate(190%)!important;backdrop-filter:blur(30px) saturate(190%)!important;border-bottom:.5px solid var(--line)!important;min-height:56px}
-html.st-ios[data-theme=dark] .topbar{background:rgba(28,28,30,.6)!important}
-html.st-ios .topbar .title{font-size:18px!important}
-html.st-ios .topbar .bell,html.st-ios .topbar .rate-chip,html.st-ios .topbar .tb-cc,html.st-ios .topbar .icon-btn{height:36px;min-width:36px;border-radius:50%!important;border:none!important;background:var(--key)!important}
-html.st-ios .topbar .rate-chip{border-radius:18px!important;padding:0 12px}
-html.st-ios .topbar .tb-user{width:36px!important;height:36px!important}
-html.st-ios .cc-pop,html.st-ios .pb-menu,html.st-ios .apps-pop{background:rgba(255,255,255,.78);-webkit-backdrop-filter:blur(40px) saturate(190%);backdrop-filter:blur(40px) saturate(190%);border:.5px solid var(--line);border-radius:24px}
-html.st-ios[data-theme=dark] .cc-pop,html.st-ios[data-theme=dark] .pb-menu,html.st-ios[data-theme=dark] .apps-pop{background:rgba(44,44,46,.78)}
-html.st-ios .cc-t,html.st-ios .cc-row{border:none;background:var(--key);border-radius:16px}
-html.st-ios .ah-app{border:none;border-radius:24px}
-html.st-ios .ah-ic{border-radius:18px}
-html.st-ios #view .pb-search>.search input.f{height:44px!important;border-radius:12px!important}
-html.st-ios #view .pb-search>.pb-filter,html.st-ios #view .pb-search>.pb-vt,html.st-ios #view .pb-search>.cam-btn,html.st-ios #view .pb-search>.pb-acts>.pb-ic,html.st-ios #view .pb-search>.pb-acts>.btn{width:44px!important;min-width:44px!important;height:44px!important;border-radius:12px!important;border:none!important;background:var(--key)!important}
-html.st-ios #view .pb-search>.pb-acts>.btn.pb-plus{background:var(--accent)!important;color:#fff!important}
-html.st-ios .sale-head .btn,html.st-ios .sale-head .sale-cartbtn{height:44px!important;min-height:44px!important;border-radius:12px!important}
-html.st-ios .sale-chips>button,html.st-ios .pbar>.pb-chips>button{height:36px;border-radius:18px;border:none;background:var(--key)}
-html.st-ios .sale-chips>button.on{background:var(--accent);color:#fff}
-html.st-ios .note{border-radius:14px}
 </style>
 </head>
 <body>
@@ -15298,7 +15259,7 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
           if (lb) {
             const flagL = () => { const sc = $('[data-sec="look"]', root), f = sc && $('[data-flag]', sc), sm = sc && $('[data-sum]', sc); if (sm) sm.innerHTML = SUM.look(); if (f) { f.classList.remove('show'); void f.offsetWidth; f.classList.add('show'); } };
             lb.addEventListener('change', e => {
-              const t = e.target, map = { lkMode: 'mode', lkBy: 'by', lkAcc: 'accent', lkSize: 'size', lkFrom: 'from', lkTo: 'to', lkUi: 'ui', lkStyle: 'style' };
+              const t = e.target, map = { lkMode: 'mode', lkBy: 'by', lkAcc: 'accent', lkSize: 'size', lkFrom: 'from', lkTo: 'to', lkUi: 'ui' };
               if (!map[t.name]) return;
               Look.set(map[t.name], t.value);
               $('[data-lk-auto]', lb).hidden = Look.prefs.mode !== 'auto'; $('[data-lk-time]', lb).hidden = !(Look.prefs.mode === 'auto' && Look.prefs.by === 'time');
@@ -15649,7 +15610,7 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
   const Look = (() => {
     const KEY = 'tbpos_look'; let p = null;
     try { p = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) { p = null; }
-    p = Object.assign({ mode: 'auto', by: 'system', from: '18:00', to: '06:00', accent: 'orange', size: 'n', ui: 'apps', style: 'ios' }, p || {});
+    p = Object.assign({ mode: 'auto', by: 'system', from: '18:00', to: '06:00', accent: 'orange', size: 'n', ui: 'apps' }, p || {});
     const ACCS = { blue: ['#007AFF', '#0A84FF'], purple: ['#A550A7', '#B062B2'], pink: ['#F74F9E', '#F85FA7'], red: ['#E0383E', '#EF4A50'], orange: ['#F7821B', '#F88B2C'], yellow: ['#FFC600', '#FFCC1A'], green: ['#62BA46', '#6CC24F'], graphite: ['#8C8C8C', '#989898'] };
     const ACC = Object.fromEntries(Object.entries(ACCS).map(([k, v]) => [k, v[0]]));
     const SIZE = { n: 1, l: 1.08, xl: 1.16 };
@@ -15684,8 +15645,7 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
       const fi = document.querySelector('link[rel=icon]'); if (fi) { const h = fi.href.replace(/%23[0-9A-Fa-f]{6}/g, encodeURIComponent(ACCS[key][dark ? 1 : 0])); if (h !== fi.href) fi.href = h; }
       document.documentElement.style.zoom = SIZE[p.size] && SIZE[p.size] !== 1 ? SIZE[p.size] : '';
       document.documentElement.style.setProperty('--z', SIZE[p.size] || 1);
-      document.documentElement.classList.toggle('apps-ui', p.ui !== 'side');
-      document.documentElement.classList.toggle('st-ios', p.style !== 'mac');   // Apple's iPad/iPhone look, or the macOS one   // one section at a time (like Odoo) or the side menu
+      document.documentElement.classList.toggle('apps-ui', p.ui !== 'side');   // one section at a time (like Odoo) or the side menu
     }
     sys.addEventListener('change', () => { if (p.mode === 'auto' && p.by === 'system') apply(); });
     setInterval(() => { if (p.mode === 'auto' && p.by === 'time') apply(); }, 60000);
@@ -16086,7 +16046,6 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
       ${row(_t('خۆکار بە پێی'), `<div class="mseg lk-seg" role="radiogroup">${[['system', _t('ویندۆز / مۆبایل')], ['time', _t('کات')]].map(([k, l]) => `<label><input type="radio" name="lkBy" value="${k}" ${L.by === k ? 'checked' : ''}><span>${l}</span></label>`).join('')}</div>`, `data-lk-auto ${L.mode === 'auto' ? '' : 'hidden'}`)}
       ${row(_t('تاریک لە'), `<div class="lk-time"><input class="f num" type="time" name="lkFrom" value="${esc(L.from)}"><span>${_t('تا')}</span><input class="f num" type="time" name="lkTo" value="${esc(L.to)}"></div>`, `data-lk-time ${L.mode === 'auto' && L.by === 'time' ? '' : 'hidden'}`)}
     </div><h5 class="sg">${_t('شێوازی ئەپ')}</h5><div class="sc">
-      ${row(_t('ستایل'), `<div class="mseg lk-seg" role="radiogroup">${[['ios', 'iPad / iPhone'], ['mac', 'macOS']].map(([k, l]) => `<label><input type="radio" name="lkStyle" value="${k}" ${(L.style || 'ios') === k ? 'checked' : ''}><span>${l}</span></label>`).join('')}</div>`)}
       ${row(_t('مێنیو'), `<div class="mseg lk-seg" role="radiogroup">${[['apps', _t('بەشەکان (یەک بەش لە یەک کاتدا)')], ['side', _t('مێنیوی لاتەنیشت')]].map(([k, l]) => `<label><input type="radio" name="lkUi" value="${k}" ${(L.ui || 'apps') === k ? 'checked' : ''}><span>${l}</span></label>`).join('')}</div>`)}
     </div><h5 class="sg">${_t('ڕەنگ و نووسین')}</h5><div class="sc">
       ${row(_t('ڕەنگی سەرەکی'), `<div class="lk-accs" role="radiogroup" aria-label="${_t('ڕەنگی سەرەکی')}">${Object.keys(Look.ACC).map(k => `<label class="lk-acc" title="${LOOK_ACC[k]}"><input type="radio" name="lkAcc" value="${k}" ${L.accent === k ? 'checked' : ''} aria-label="${LOOK_ACC[k]}"><span style="--c:${Look.ACC[k]}"></span></label>`).join('')}</div>`)}
