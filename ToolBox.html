@@ -2,7 +2,7 @@
 <html lang="ckb" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="tb-build" content="202611222237">
+<meta name="tb-build" content="202611222241">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#F4F4F6">
 <title>ToolBox</title>
@@ -4813,6 +4813,8 @@ html[dir=ltr] .i-chev,html[dir=ltr] .i-back{scale:-1 1}
 .img-zoom .iz-r .pstk{font-size:14px}
 .img-zoom .iz-s{font-size:13.5px}
 .img-zoom .iz-s svg{width:15px;height:15px}
+@media (max-width:640px){ .ah-grid{grid-template-columns:repeat(3,1fr)!important;gap:10px} }   /* phone home: 3 per row, as intended (a later rule had made it 2) */
+.pgrid .pitem .pfav{border-radius:50%}
 </style>
 </head>
 <body>
@@ -8839,8 +8841,7 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
       const fav = [], velIn = [], plainIn = [], velOut = [], plainOut = [];
       for (const p of nameOrder()) {
         if (p.archived || (cat && p.category !== cat) || (q && !pHay(p).includes(q))) continue;
-        if (p.fav) fav.push(p);
-        else if (canSell(p)) (vel[p.id] > 0 ? velIn : plainIn).push(p);
+        if (canSell(p)) (vel[p.id] > 0 ? velIn : plainIn).push(p);
         else (vel[p.id] > 0 ? velOut : plainOut).push(p);
       }
       const byVel = (a, b) => (vel[b.id] || 0) - (vel[a.id] || 0);   // stable: the same speed stays in name order
@@ -8864,8 +8865,7 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
     const gridKey = `${ctx.saleList.key}|${saleShow}|${ctx.hiProd}|${new Date().toDateString()}`;
     if (!ctx.saleGrid || ctx.saleGrid.key !== gridKey) ctx.saleGrid = { key: gridKey, html: !C.db.products.length ? `<div class="card empty">${_t('هیچ کاڵایەک تۆمار نەکراوە.')} <a class="more" href="#/products?new=1">${_t('کاڵای نوێ زیاد بکە')}</a></div>`
       : !prods.length ? `<div class="card empty">${_t('هیچ کاڵایەک نەدۆزرایەوە')}</div>`
-      : `<div class="pgrid">${saleBundles(q)}${prods.slice(0, saleShow).map((p, k) => `<button class="pitem ${p.fav ? 'is-fav' : ''} ${k === ctx.hiProd ? 'kb-hi' : ''}" data-add="${p.id}" ${p.image ? '' : `title="${esc(p.name)}"`} ${sellable(p) ? '' : 'disabled'}>
-          <span class="pfav ${p.fav ? 'on' : ''}" data-fav="${p.id}" role="button" title="${p.fav ? _t('لابردن لە دڵخوازەکان') : _t('دڵخواز: هەمیشە لە سەرەوە')}" aria-label="${_t('دڵخواز')}">${p.fav ? '★' : '☆'}</span>
+      : `<div class="pgrid">${saleBundles(q)}${prods.slice(0, saleShow).map((p, k) => `<button class="pitem ${k === ctx.hiProd ? 'kb-hi' : ''}" data-add="${p.id}" ${p.image ? '' : `title="${esc(p.name)}"`} ${sellable(p) ? '' : 'disabled'}>
           <div class="pitem-top">${thumb(p)}<span class="nm">${esc(p.name)}${p.brand && p.name.toLowerCase().includes(p.brand.trim().toLowerCase()) ? '' : nameTag(p)}</span></div><span class="pr">${saleCardPrice(p)}</span>
           ${saleCardStock(p)}${promoBadge(p)}</button>`).join('')}</div>`
       + autoMoreHTML('sale', prods.length - saleShow)
@@ -8895,7 +8895,7 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
       const stT = l.priceCur === 'USD' ? '$' + PSTEP('USD') : fmt(PSTEP('IQD'));
       const open = i === openIdx;
       return `<div class="cl ${open ? 'open' : 'fold'} ${x.loss ? 'loss' : ''} ${i === ctx.lastLine ? 'last' : ''} ${i === ctx.lastLine && flash ? 'flash' : ''} ${i === ctx.lastLine && flash && scanOk ? 'scan-ok' : ''} ${i === ctx.lastLine && isNew ? 'enter' : ''}" data-line="${i}" ${open ? '' : `role="button" tabindex="0" title="${_t('کلیک بکە بۆ دەستکاری')}"`}>
-        <div class="cl-top"><div class="nm" title="${esc(l.name || p.name)}"><span class="nm-t">${p.quick ? `<span class="q-tag">${ic('plus')}</span>` : ''}${esc(l.name || p.name)}${l.name && l.name !== p.name ? '' : nameTag(p)}</span>${C.isService(p) ? '' : `<span class="cl-left ${x.left <= 0 ? 'neg' : x.left <= C.minStock(p) ? 'warn-t' : ''}">${_t('ماوە')} ${mixedQty(p, C.rq(x.left), true) || `<span class="num">${fq(C.rq(x.left))}</span> ${cuab(p.unit)}`}</span>`}${bits.length ? `<span class="cl-info">${bits.join('<i>·</i>')}</span>` : ''}</div><span class="cl-sum num"><bdi>${fq(l.qty)} ${cuab(l.unit)}</bdi> × <bdi>${l.priceCur === 'USD' ? '$' + l.price : fmt(l.price)}</bdi></span><span class="cl-total num" title="${_t('کۆی ئەم کاڵایە')} (${CUR()})">${fmt(x.total)}</span><button class="btn ghost sm cl-rm" data-rm title="${_t('لابردن')}" aria-label="${_t('لابردن')}">${ic('trash')}</button></div>
+        <div class="cl-top"><div class="nm" title="${esc(l.name || p.name)}"><span class="nm-t">${p.quick ? `<span class="q-tag">${ic('plus')}</span>` : ''}${esc(l.name || p.name)}${l.name && l.name !== p.name ? '' : nameTag(p)}</span>${C.isService(p) ? '' : `<span class="cl-left ${x.left <= 0 ? 'neg' : x.left <= C.minStock(p) ? 'warn-t' : ''}">${_t('ماوە')} ${mixedQty(p, C.rq(x.left)) || `<span class="num">${fq(C.rq(x.left))}</span> ${cuab(p.unit)}`}</span>`}${bits.length ? `<span class="cl-info">${bits.join('<i>·</i>')}</span>` : ''}</div><span class="cl-sum num"><bdi>${fq(l.qty)} ${cuab(l.unit)}</bdi> × <bdi>${l.priceCur === 'USD' ? '$' + l.price : fmt(l.price)}</bdi></span><span class="cl-total num" title="${_t('کۆی ئەم کاڵایە')} (${CUR()})">${fmt(x.total)}</span><button class="btn ghost sm cl-rm" data-rm title="${_t('لابردن')}" aria-label="${_t('لابردن')}">${ic('trash')}</button></div>
         <div class="cl-row">
           <div class="qty"><button data-q="-1" aria-label="${_t('کەمکردن')}">−</button><input name="qty" inputmode="${dec ? 'decimal' : 'numeric'}" value="${l.qty}" aria-label="${_t('بڕ')}"><button data-q="1" aria-label="${_t('زیادکردن')}">+</button></div>
           ${C.unitsOf(p).length > 1 ? `<select class="u-box" name="unit" aria-label="${_t('یەکە')}" title="${uName(l.unit)}">${C.unitsOf(p).map(u => `<option value="${u}" ${u === l.unit ? 'selected' : ''} title="${uName(u)}">${cuab(u)}</option>`).join('')}</select>` : `<span class="u-box" title="${uName(l.unit)}">${cuab(l.unit)}</span>`}
@@ -10025,7 +10025,7 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
   function receiptHTML(s, copy) {
     const st = C.db.settings, n = s.items.length;
     return `<div class="rc">${rcHead(_t('پسوڵەی فرۆشتن'), copy)}
-      <div class="rc-meta"><span>${_t('ژمارە')} <b class="num">#${docNo(s.id)}</b></span><span class="num">${fDate(s.date)} · ${fTime(s.date)}</span></div>
+      <div class="rc-meta"><span>${_t('ژمارە')} <b class="num">#${docNo(s.id)}</b></span><span class="num" dir="ltr">${fDate(s.date)} · ${fTime(s.date)}</span></div>
       ${st.rcCashier !== false || (st.rcCustomer !== false && s.customerId) ? `<div class="rc-meta">${st.rcCashier !== false ? `<span>${_t('کاشێر:')} ${esc(userName(s.userId))}</span>` : '<span></span>'}${st.rcCustomer !== false && s.customerId ? `<span>${_t('کڕیار:')} <b>${esc(custName(s.customerId))}</b></span>` : ''}</div>` : ''}
       <div class="rc-items">${s.items.map((i, k) => { const pr = C.byId('products', i.productId), code = st.rcCodes && pr ? (pr.code || pr.barcode || '') : '';
         return `<div class="rc-i"><div class="rc-n"><span class="num rc-k">${k + 1}.</span> ${esc(i.name)}${code ? ` <span class="rc-code num">${esc(code)}</span>` : ''}</div><div class="rc-r rc-q"><span>${uq(i.qty, i.unit || 'piece')} × ${rcMoney(i.unitPrice)}${fxOf(i) ? ` <span class="num">(${fxOf(i)})</span>` : ''}</span><b>${rcMoney(C.lineTotal(i))}</b></div>
@@ -10043,7 +10043,7 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
     return `<div class="inv">
       <div class="inv-h"><div class="inv-shop">${st.shopLogo && st.rcLogo !== false ? `<img class="inv-logo" data-img="${esc(st.shopLogo)}" alt="">` : ''}<div><div class="inv-name">${esc(st.shopName === 'دوکانەکەم' ? _t('دوکانەکەم') : st.shopName)}</div>${st.rcHeader ? `<div>${esc(st.rcHeader)}</div>` : ''}${st.shopAddress ? `<div>${esc(st.shopAddress)}</div>` : ''}${(st.shopPhone || st.shopPhone2) ? `<div class="num">${esc([st.shopPhone, st.shopPhone2].filter(Boolean).join(' · '))}</div>` : ''}</div></div>
         <div class="inv-meta"><div class="inv-title">${_t('فاکتۆری فرۆشتن')}${copy ? ` <span class="inv-copy">${_t('کۆپی')}</span>` : ''}</div>
-          <div>${_t('ژمارە:')} <b class="num">#${docNo(s.id)}</b></div><div>${_t('بەروار:')} <span class="num">${fDate(s.date)} · ${fTime(s.date)}</span></div>${st.rcCashier !== false ? `<div>${_t('کاشێر:')} ${esc(userName(s.userId))}</div>` : ''}
+          <div>${_t('ژمارە:')} <b class="num">#${docNo(s.id)}</b></div><div>${_t('بەروار:')} <span class="num" dir="ltr">${fDate(s.date)} · ${fTime(s.date)}</span></div>${st.rcCashier !== false ? `<div>${_t('کاشێر:')} ${esc(userName(s.userId))}</div>` : ''}
           ${st.rcBarcode !== false ? `<div class="inv-bc">${barcodeSVG(saleCode(s), { h: 22 })}</div>` : ''}</div></div>
       ${st.rcCustomer !== false ? `<div class="inv-cust"><span>${_t('کڕیار:')}</span> <b>${cu ? esc(cu.name) : _t('کڕیاری ئاسایی')}</b>${cu && cu.phone ? ` · <span class="num">${esc(cu.phone)}</span>` : ''}</div>` : ''}
       <table class="inv-t"><thead><tr><th>#</th><th>${_t('کاڵا')}</th>${st.rcCodes ? `<th>${_t('کۆد')}</th>` : ''}<th class="n">${_t('بڕ')}</th><th class="n">${_t('نرخی تاک')}</th><th class="n">${_t('کۆ')}</th></tr></thead><tbody>
@@ -10074,7 +10074,7 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
       <div class="pr-mh">${_t('ئەم جارە چاپ بکە وەک')}</div>${PAPERS.map(([k, l]) => `<button type="button" data-print-as="${k}">${ic(k === 'a4' || k === 'a5' ? 'receipt' : 'printer')}${k === 'a4' || k === 'a5' ? _tf('فاکتۆری {0}', l) : l}${k === Prt.p.paper ? ` <span class="muted pr-def">${_t('بنەڕەت')}</span>` : ''}</button>`).join('')}</div></details></span>`;
   function returnReceiptHTML(r, copy) {
     return `<div class="rc">${rcHead(r.isVoid ? _t('هەڵوەشاندنەوەی فرۆشتن') : _t('پسوڵەی گەڕاندنەوە'), copy)}
-      ${rcRow(_t('بۆ فرۆشتنی'), `<span class="num">#${docNo(r.saleId)}</span>`)}${rcRow(_t('بەروار'), `<span class="num">${fDate(r.date)} ${fTime(r.date)}</span>`)}
+      ${rcRow(_t('بۆ فرۆشتنی'), `<span class="num">#${docNo(r.saleId)}</span>`)}${rcRow(_t('بەروار'), `<span class="num" dir="ltr">${fDate(r.date)} · ${fTime(r.date)}</span>`)}
       ${rcRow(_t('کاشێر'), esc(userName(r.userId)))}${r.customerId ? rcRow(_t('کڕیار'), esc(custName(r.customerId))) : ''}
       <div class="rc-items">${r.items.map(i => `<div class="rc-i"><div class="rc-r"><span>${esc(i.name)} · ${uq(i.qty, i.unit)}</span></div></div>`).join('')}</div>
       ${rcRow(_t('بەهای گەڕاوە'), rcMoney(r.value), 'big')}
@@ -15393,8 +15393,8 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
         const rcPrev = () => {
           const box = $('[data-rc-prev]', root); if (!box) return;
           const last = C.db.sales[C.db.sales.length - 1];
-          const ex = last || { id: 123, date: new Date().toISOString(), userId: ctx.user.id, customerId: null, subtotal: 61240, discount: 0, rounding: -240, total: 61000, paid: 61000, given: 70000,
-            pay: { cash: 61000, fib: 0, debt: 0 }, debt: null, items: [{ name: _t('کاڵای یەکەم'), qty: 1, unit: 'piece', unitPrice: 60000 }, { name: _t('کاڵای دووەم'), qty: 0.62, unit: 'kg', unitPrice: 2000 }] };
+          const ex = last || { id: 123, date: new Date().toISOString(), userId: ctx.user.id, customerId: null, subtotal: 61250, discount: 0, rounding: 0, total: 61250, paid: 61250, given: 70000,
+            pay: { cash: 61250, fib: 0, debt: 0 }, debt: null, items: [{ name: _t('کاڵای یەکەم'), qty: 1, unit: 'piece', unitPrice: 60000 }, { name: _t('کاڵای دووەم'), qty: 0.625, unit: 'kg', unitPrice: 2000 }] };
           const pp = Prt.p.paper; box.className = `rc-prev ${pp}`;
           const page = pp === 'a4' || pp === 'a5';
           box.innerHTML = page ? `<div class="rc-fit">${inRc(() => invoiceHTML(ex, false))}</div>` : inRc(() => receiptHTML(ex, false)).replace(/class="rc"/, `class="rc f-${C.db.settings.rcFont || 'm'} ${pp === '58' ? 'w58' : ''}"`);
