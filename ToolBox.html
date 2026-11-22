@@ -2,7 +2,7 @@
 <html lang="ckb" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="tb-build" content="202611222233">
+<meta name="tb-build" content="202611222235">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#F4F4F6">
 <title>ToolBox</title>
@@ -4806,6 +4806,9 @@ html[dir=ltr] .i-chev,html[dir=ltr] .i-back{scale:-1 1}
 .pgrid .pitem-top .nm .nm-b{font-weight:500}
 .pgrid .pitem .pfav{top:12px!important;bottom:auto!important;inset-inline-end:12px!important;background:color-mix(in srgb,var(--card) 85%,transparent)}
 .cart.is-empty [data-cart-close]{display:none!important}
+.img-peek{position:fixed;z-index:90;width:300px;height:300px;padding:10px;background:#fff;border-radius:14px;box-shadow:0 0 0 .5px rgba(0,0,0,.12),0 12px 32px rgba(0,0,0,.22);pointer-events:none;animation:imgPeekIn .12s ease-out}
+.img-peek img{width:100%;height:100%;object-fit:contain;display:block}
+@keyframes imgPeekIn{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
 </style>
 </head>
 <body>
@@ -8918,14 +8921,14 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
       : `<button type="button" class="cdisc-add" data-cdisc-open>${ic('plus')}${_t('داشکاندن')}<kbd class="kbd">F8</kbd></button>`;
     const html = `
       ${C.db.settings.requireShift && !C.currentShift() ? `<div class="note warn" style="margin-bottom:10px">${ic('alert')}<span class="note-t">${_t('شیفت کراوە نییە — بۆ تۆمارکردنی فرۆشتن سەرەتا شیفت بکەرەوە.')}</span> ${can('shifts') ? `<a class="btn sm" href="#/shifts?open=1">${_t('کردنەوەی شیفت')}</a>` : ''}</div>` : ''}
-      <div class="pos-layout ${(ctx.cart.length || ctx.cartOpenEmpty || !phoneCart()) && !ctx.cartHidden ? '' : 'no-cart'}">
+      <div class="pos-layout ${(ctx.cart.length || ctx.cartOpenEmpty) && !ctx.cartHidden ? '' : 'no-cart'}">
         <div>
           <div class="sale-head"><h1>${T.nav.sale}</h1>
             ${catSel}<div class="search">${ic('search')}<kbd class="kbd in-search">F2</kbd><input class="f" id="psearch" placeholder="${phoneCart() ? _t('ناو، بارکۆد یان پۆل…') : _t('ناو، بارکۆد یان پۆل… (Enter بۆ زیادکردن)')}" aria-keyshortcuts="F2" value="${esc(ctx.cartSearch)}" autocomplete="off"></div>${Cam.show() ? `<button type="button" class="btn cam-btn" data-cam aria-label="${_t('خوێندنەوە بە کامێرا')}">${ic('camera')}</button>` : ''}
             <button type="button" class="btn ghost sale-quick" data-quick title="${_t('کاڵایەک کە لە لیستدا نییە (F4)')}">${ic('plus')}<span>${_t('کاڵای خێرا')}</span><kbd class="kbd">F4</kbd></button>
             ${lastSaleOfMine() ? `<button type="button" class="btn ghost" data-lastrc title="${_t('چاپی دووبارەی پسوڵەی')} #${docNo(lastSaleOfMine().id)}">${ic('printer')}${_t('دوایین پسوڵە')}</button>` : ''}
             ${held.length ? `<button class="btn ghost" data-held>${ic('clock')}${_t('هەڵگیراو')} <span class="badge" style="background:var(--warn)">${held.length}</span></button>` : ''}
-            ${(ctx.cart.length || ctx.cartOpenEmpty || !phoneCart()) && !ctx.cartHidden ? '' : `<button type="button" class="sale-cartbtn" data-opencart title="${_t('سەبەتە')}" aria-label="${_t('سەبەتە')}">${ic('cart')}${ctx.cart.length ? `<span class="num">${ctx.cart.length}</span>` : ''}</button>`}</div>
+            ${(ctx.cart.length || ctx.cartOpenEmpty) && !ctx.cartHidden ? '' : `<button type="button" class="sale-cartbtn" data-opencart title="${_t('سەبەتە')}" aria-label="${_t('سەبەتە')}">${ic('cart')}${ctx.cart.length ? `<span class="num">${ctx.cart.length}</span>` : ''}</button>`}</div>
           ${catChips}
           <div class="pscroll">${grid}</div>
         </div>
@@ -16053,6 +16056,24 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
   addEventListener('resize', () => { const p = $('#ntPanel'); if (p && !p.hidden) placePanel(); });
   try { if (window.ToolBoxHost && ToolBoxHost.notify) ToolBoxHost.notify.onClick(() => { if (ctx.user) openPanel(); }); } catch (e) { /* older Windows part */ }
   function tbDate() { const d = new Date(); $$('[data-tb-date]').forEach(el => { el.innerHTML = `<span class="num">${fDate(d)}</span> · <span class="num">${fTime(d)}</span>`; }); }
+  (function imgPeek() {   // hover a product picture: the same picture, shown bigger beside the card (no new file, nothing stored)
+    let t = 0, box = null;
+    const hide = () => { clearTimeout(t); if (box) { box.remove(); box = null; } };
+    document.addEventListener('mouseover', e => {
+      const img = e.target.closest && e.target.closest('.pgrid .pitem-top img.thumb');
+      if (!img) return; if (!matchMedia('(hover:hover)').matches) return;
+      clearTimeout(t); t = setTimeout(() => {
+        const src = img.currentSrc || img.src; if (!src || !img.isConnected) return;
+        hide(); box = document.createElement('div'); box.className = 'img-peek'; box.innerHTML = `<img src="${src}" alt="">`; document.body.appendChild(box);
+        const card = img.closest('.pitem') || img, r = card.getBoundingClientRect(), w = box.offsetWidth, h = box.offsetHeight;
+        const right = innerWidth - r.right, left = r.left;   // the side with more room
+        const x = right >= w + 16 || right >= left ? Math.min(r.right + 10, innerWidth - w - 8) : Math.max(8, r.left - w - 10);
+        box.style.left = x + 'px'; box.style.top = Math.max(8, Math.min(r.top, innerHeight - h - 8)) + 'px';
+      }, 350);
+    });
+    document.addEventListener('mouseout', e => { if (e.target.closest && e.target.closest('.pgrid .pitem-top img.thumb')) hide(); });
+    ['mousedown', 'keydown', 'wheel', 'hashchange'].forEach(k => addEventListener(k, hide, true));
+  })();
   const fsCheck = () => document.documentElement.classList.toggle('is-fs', !!document.fullscreenElement || (innerWidth >= screen.width && innerHeight >= screen.height));   // full screen hides the Windows clock: show ours
   document.addEventListener('fullscreenchange', fsCheck); addEventListener('resize', fsCheck); fsCheck();
   setInterval(() => { if (ctx.user) refreshBell(true); }, 60000);
