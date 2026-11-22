@@ -2,7 +2,7 @@
 <html lang="ckb" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="tb-build" content="202611222140">
+<meta name="tb-build" content="202611222150">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#F4F4F6">
 <title>ToolBox</title>
@@ -1064,20 +1064,6 @@ tr.row-dim td .num,tr.row-dim td{opacity:.85}
 .cc-seg{display:flex;gap:2px;background:var(--key);border-radius:9px;padding:2px}
 .cc-seg button{border:none;background:none;padding:5px 9px;border-radius:7px;font:600 12px/1 inherit;color:var(--ink);cursor:pointer}
 .cc-seg button.on{background:var(--card);box-shadow:0 1px 2px rgba(0,0,0,.12)}
-.lock-scr{position:fixed;inset:0;z-index:200;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);display:grid;place-items:center}
-.lk-box{display:flex;flex-direction:column;align-items:center;gap:10px;width:280px}
-.lk-clock{display:flex;flex-direction:column;align-items:center;margin-bottom:18px}
-.lk-clock>b{font-size:56px;font-weight:700;letter-spacing:-1px;line-height:1.1}.lk-clock>span{color:var(--muted);font-size:15px}
-.lk-box .avatar{width:64px;height:64px;font-size:24px}.lk-name{font-size:17px}.lk-hint{color:var(--muted);font-size:13px}
-.lk-dots{display:flex;gap:16px;margin:6px 0 10px}
-.lk-dots i{width:14px;height:14px;border-radius:50%;border:2px solid var(--ink);box-sizing:border-box;transition:background .12s}
-.lk-dots i.on{background:var(--ink)}
-.lk-dots.shake{animation:lkShake .4s}
-@keyframes lkShake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-10px)}40%,80%{transform:translateX(10px)}}
-.lk-pad{display:grid;grid-template-columns:repeat(3,72px);gap:14px;margin-bottom:10px;direction:ltr}
-.lk-pad button{width:72px;height:72px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:26px;font-weight:500;cursor:pointer;display:grid;place-items:center}
-.lk-pad button:active{background:var(--key)}
-.lk-pad [data-lk-del]{border:none;background:none}.lk-pad svg{width:24px;height:24px}
 #view .pbar .pb-search{display:flex!important;align-items:center!important;gap:8px!important}
 #view .pb-search>.search{margin:0!important;align-self:center!important}
 #view .pb-search>.search input.f{height:38px!important;box-sizing:border-box!important;margin:0!important}
@@ -16506,37 +16492,10 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
   }
   function ccDot() { $$('[data-cc-dot]').forEach(d => { d.classList.toggle('bad', ccNeeds()); }); }
   setInterval(() => { if (ctx.user) ccDot(); }, 15000);
-  function lockScreen() {   // the cashier steps away: the screen waits for the same PIN, the cart stays
-    const u = ctx.user; if (!u || $('.lock-scr')) return;
+  function lockScreen() {   // locking = the sign-in screen; the cart is kept and comes back with the same PIN
+    if (!ctx.user) return;
     try { saveCart(); } catch (e) { /* kept as it goes */ }
-    const el = document.createElement('div'); el.className = 'lock-scr';
-    el.innerHTML = `<div class="lk-box"><div class="lk-clock"><b class="num" data-lk-t></b><span data-lk-d></span></div>
-      <div class="avatar" style="background:${Login.colorFor(u)}">${esc(Login.initials(u.name))}</div><b class="lk-name">${esc(u.name)}</b>
-      <small class="lk-hint">${_t('کۆدی نهێنی بنووسە')}</small><div class="lk-dots" data-lk-dots>${'<i></i>'.repeat(4)}</div>
-      <div class="lk-pad">${[1, 2, 3, 4, 5, 6, 7, 8, 9].map(n => `<button type="button" data-lk-n="${n}" class="num">${n}</button>`).join('')}<span></span><button type="button" data-lk-n="0" class="num">0</button><button type="button" data-lk-del aria-label="${_t('سڕینەوە')}">${ic('back')}</button></div>
-      <button type="button" class="btn ghost sm" data-lk-out>${ic('logout')}${_t('بەکارهێنەرێکی تر')}</button></div>`;
-    document.body.appendChild(el);
-    let pin = '', busy = false;
-    const dots = $('[data-lk-dots]', el);
-    const tick = () => { const d = new Date(); $('[data-lk-t]', el).textContent = fTime(d); $('[data-lk-d]', el).innerHTML = `${KU_DAYS[d.getDay()]} <span class="num">${fDate(d)}</span>`; };
-    tick(); const clk = setInterval(tick, 10000);
-    const show = () => { [...dots.children].forEach((d, i) => d.classList.toggle('on', i < pin.length)); };
-    const done = () => { clearInterval(clk); document.removeEventListener('keydown', key, true); el.remove(); };
-    const add = n => { if (busy || pin.length >= 4) return; pin += n; show();
-      if (pin.length === 4) { busy = true; setTimeout(() => {
-        if (Users.check(u, pin)) { done(); return; }
-        dots.classList.add('shake'); setTimeout(() => { dots.classList.remove('shake'); pin = ''; show(); busy = false; }, 450);
-      }, 120); } };
-    const key = e => { e.stopPropagation();
-      if (/^[0-9٠-٩]$/.test(e.key)) { e.preventDefault(); add(digits(e.key)); }
-      else if (e.key === 'Backspace') { e.preventDefault(); if (!busy) { pin = pin.slice(0, -1); show(); } }
-      else if (e.key !== 'Tab') e.preventDefault(); };
-    document.addEventListener('keydown', key, true);
-    el.addEventListener('click', e => {
-      const n = e.target.closest('[data-lk-n]'); if (n) { add(n.dataset.lkN); return; }
-      if (e.target.closest('[data-lk-del]')) { if (!busy) { pin = pin.slice(0, -1); show(); } return; }
-      if (e.target.closest('[data-lk-out]')) { done(); $('[data-logout]').click(); }
-    });
+    $('[data-logout]').click();
   }
   function openCC(btn) {
     const old = $('.cc-pop'); if (old) { old.remove(); return; }
