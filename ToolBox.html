@@ -2,7 +2,7 @@
 <html lang="ckb" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="tb-build" content="202611222236">
+<meta name="tb-build" content="202611222237">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#F4F4F6">
 <title>ToolBox</title>
@@ -4806,6 +4806,13 @@ html[dir=ltr] .i-chev,html[dir=ltr] .i-back{scale:-1 1}
 .pgrid .pitem-top .nm .nm-b{font-weight:500}
 .pgrid .pitem .pfav{top:12px!important;bottom:auto!important;inset-inline-end:12px!important;background:color-mix(in srgb,var(--card) 85%,transparent)}
 .cart.is-empty [data-cart-close]{display:none!important}
+.img-zoom{width:340px;max-width:calc(100vw - 16px);padding:10px}
+.img-zoom img{height:320px}
+.img-zoom .iz-n{font-size:15px;padding:9px 4px 2px}
+.img-zoom .iz-r{font-size:15px;padding-top:3px}
+.img-zoom .iz-r .pstk{font-size:14px}
+.img-zoom .iz-s{font-size:13.5px}
+.img-zoom .iz-s svg{width:15px;height:15px}
 </style>
 </head>
 <body>
@@ -11167,7 +11174,7 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
       const host = img && img.closest('.pitem[data-add], .pitem[data-p], [data-p]');
       if (img && img === on) return; hide();
       if (!host || host.closest('.cart, .modal-bg')) return;
-      on = img; t = setTimeout(() => { if (on === img) show(host, img); }, 300);
+      on = img; t = setTimeout(() => { if (on === img) show(host, img); }, 650);   // a short rest on the picture, not a pass-over
     }, { passive: true });
     ['scroll', 'keydown', 'wheel', 'hashchange'].forEach(ev => addEventListener(ev, () => { touchOpen = false; hide(); }, { passive: true, capture: true }));
     addEventListener('mousedown', () => { if (!touchOpen) hide(); }, { passive: true, capture: true });   // a phone also sends a "mouse" press after a hold: the picture stays
