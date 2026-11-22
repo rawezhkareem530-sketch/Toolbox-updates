@@ -2,7 +2,7 @@
 <html lang="ckb" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="tb-build" content="202611222228">
+<meta name="tb-build" content="202611222229">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#F4F4F6">
 <title>ToolBox</title>
@@ -1123,10 +1123,8 @@ tr.row-dim td .num,tr.row-dim td{opacity:.85}
   .apps-ui .shell{grid-template-columns:1fr}
   .apps-ui .shell>.side,.apps-ui .shell>.scrim{display:none}
   .apps-ui .tb-home{display:grid}
-  .apps-ui .topbar .title{display:flex;align-items:center;gap:8px;font-weight:700;font-size:16px;cursor:pointer;padding:5px 10px;border-radius:10px;user-select:none}
-  .apps-ui .topbar .title:hover{background:var(--key)}
-  .apps-ui .topbar .title::after{content:'';width:6px;height:6px;border:solid var(--muted);border-width:0 2px 2px 0;transform:translateY(-2px) rotate(45deg)}
-  .apps-ui body[data-page=apps] .topbar .title{cursor:default}.apps-ui body[data-page=apps] .topbar .title:hover{background:none}.apps-ui body[data-page=apps] .topbar .title::after{display:none}
+  .apps-ui .topbar .title{display:flex;align-items:center;gap:8px;font-weight:700;font-size:16px;padding:5px 6px;user-select:none}
+  .apps-ui .tb-home[aria-expanded=true]{background:var(--key)}
 }
 .apps-home{max-width:1000px;margin:10px auto 0}
 .ah-user{display:flex;align-items:center;gap:12px;margin-bottom:24px;flex-wrap:wrap}
@@ -16598,7 +16596,7 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
   const APP_TONE = { sell: '#34C759', goods: '#FF9500', people: '#007AFF', money: '#AF52DE', system: '#8E8E93' };
   const appTiles = cur => NAV.flatMap(([g, list]) => list.filter(([, , perm]) => !perm || can(perm)).map(([k, i]) => `<a class="ah-app${k === cur ? ' on' : ''}" href="#/${k}" style="--t:${APP_TONE[g]}"><span class="ah-ic">${ic(i)}<span class="badge nav-nb hidden" data-navbadge="${k}"></span></span><span class="ah-t">${T.nav[k]}</span></a>`)).join('');
   const qsList = cur => { let n = 0;   // the quick switch: a short grouped list, with the Alt shortcut of each section
-    return NAV.map(([g, list]) => { const ok = list.filter(([, , perm]) => !perm || can(perm)); if (!ok.length) return '';
+    return `<a role="menuitem" class="${cur === 'apps' ? 'on' : ''}" href="#/apps" style="--t:${APP_TONE.system}"><span class="qs-ic">${ic('grid')}</span><span class="qs-t">${_t('هەموو بەشەکان')}</span></a>` + NAV.map(([g, list]) => { const ok = list.filter(([, , perm]) => !perm || can(perm)); if (!ok.length) return '';
       return `<div class="qs-g">${T.navGroups[g]}</div>` + ok.map(([k, i]) => { n++; const key = n <= 9 ? n : n === 10 ? 0 : null;
         return `<a role="menuitem" class="${k === cur ? 'on' : ''}" href="#/${k}" style="--t:${APP_TONE[g]}"><span class="qs-ic">${ic(i)}</span><span class="qs-t">${T.nav[k]}</span><span class="badge qs-nb hidden" data-qsbadge="${k}"></span>${key !== null ? `<kbd class="qs-k ltr">Alt+${key}</kbd>` : ''}</a>`; }).join(''); }).join(''); };
   pages.apps = () => {
@@ -16773,7 +16771,7 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
       </aside>
       <div class="scrim" data-scrim></div>
       <div class="main-col" data-page-scroll>
-        <header class="topbar"><button class="icon-btn" data-menu aria-label="${_t('مێنیو')}">${ic('menu')}</button><a class="icon-btn tb-home" href="#/apps" data-nav="apps" title="${_t('هەموو بەشەکان')}" aria-label="${_t('هەموو بەشەکان')}">${ic('grid')}</a><div class="title" data-title data-apps-sw></div>
+        <header class="topbar"><button class="icon-btn" data-menu aria-label="${_t('مێنیو')}">${ic('menu')}</button><button type="button" class="icon-btn tb-home" data-apps-sw aria-haspopup="menu" aria-expanded="false" title="${_t('هەموو بەشەکان')}" aria-label="${_t('هەموو بەشەکان')}">${ic('grid')}</button><div class="title" data-title></div>
           <span class="tb-sp"></span><div class="tb-group"><span data-rate-slot></span><button type="button" class="icon-btn tb-cc" data-cc title="${_t('کۆنترۆڵ سەنتەر')}" aria-label="${_t('کۆنترۆڵ سەنتەر')}">${ic('sliders')}<i class="cc-dot" data-cc-dot></i></button>${bellHTML()}</div>
           <button type="button" class="tb-user" data-user-menu style="background:${Login.colorFor(u)}" title="${esc(u.name)}" aria-label="${esc(u.name)}">${esc(Login.initials(u.name))}</button></header>
         <main class="main" id="view"></main>
@@ -16803,9 +16801,11 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
       $('[data-um-out]', mn).onclick = () => { mn.remove(); $('[data-logout]').click(); };
       setTimeout(() => document.addEventListener('click', function off(ev) { if (!mn.contains(ev.target) && !btn.contains(ev.target)) { mn.remove(); document.removeEventListener('click', off, true); } }, true), 0);
     };
-    $('[data-apps-sw]').onclick = e => {   // the section's name opens the other sections
-      if (!document.documentElement.classList.contains('apps-ui') || innerWidth < 900 || route().name === 'apps') return;
-      const old = $('.apps-pop'); if (old) { old.remove(); return; }
+    $('[data-apps-sw]').onclick = e => {   // ⊞ is the one way to the sections: a short list (phone: the home grid)
+      const btn = e.currentTarget;
+      if (!document.documentElement.classList.contains('apps-ui') || innerWidth < 900) { navigate('/apps'); return; }
+      const old = $('.apps-pop'); if (old) { old.remove(); btn.setAttribute('aria-expanded', 'false'); return; }
+      btn.setAttribute('aria-expanded', 'true');
       const pop = document.createElement('div'); pop.className = 'apps-pop qs-list'; pop.setAttribute('role', 'menu'); pop.innerHTML = qsList(route().name);
       document.body.appendChild(pop); paintNavBadges(); const r = e.currentTarget.getBoundingClientRect();
       pop.style.top = (r.bottom + 6) + 'px'; pop.style.right = Math.max(12, innerWidth - r.right) + 'px';
@@ -16815,7 +16815,7 @@ if (typeof module !== 'undefined') module.exports = { decodeBarcode: decodeBarco
           ev.preventDefault(); ev.stopPropagation(); const i = links.indexOf(document.activeElement), n = links.length;
           const to = ev.key === 'Home' ? 0 : ev.key === 'End' ? n - 1 : i < 0 ? 0 : (i + (ev.key === 'ArrowDown' ? 1 : -1) + n) % n; links[to].focus(); return; }
         if (ev.type === 'keydown' && ev.key === 'Enter' && pop.contains(document.activeElement)) { ev.preventDefault(); ev.stopPropagation(); document.activeElement.click(); return; }
-        if (ev.type === 'keydown' && ev.key !== 'Escape') return; if (ev.type === 'click' && ev.target.closest('[data-apps-sw]')) return; pop.remove(); document.removeEventListener('click', off, true); document.removeEventListener('keydown', off, true); };
+        if (ev.type === 'keydown' && ev.key !== 'Escape') return; if (ev.type === 'click' && ev.target.closest('[data-apps-sw]')) return; pop.remove(); btn.setAttribute('aria-expanded', 'false'); document.removeEventListener('click', off, true); document.removeEventListener('keydown', off, true); };
       setTimeout(() => { document.addEventListener('click', off, true); document.addEventListener('keydown', off, true); });
     };
     $('[data-logout]').onclick = () => {
