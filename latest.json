@@ -1,18 +1,9 @@
 {
- "app": "ToolBox",
- "build": "202611222241",
- "sha256": "b9a749e7a7604a8d5a63aba0804ca8ed1519f4ad0e8da7597e7af6bdf58dac4d",
- "size": 2925143,
- "notes": "پسوڵە: بەروار و کات ڕێک · لابردنی دڵخواز · یەکە بە کوردی",
- "file": "ToolBox-202611222241.html",
- "at": "2026-11-22T22:53:28.000Z",
- "sig": "Zf0wUE9h7XdJmZfMswsPtHjMyKO1slfneNJr8nrT4EBdpLx6OGfFGrnrmX5s4pl+08AO+rqEoIn9qSKt9vlDBA==",
- "shell": {
-  "build": "202611162205",
-  "file": "ToolBox-shell-202611162205.json",
-  "sha256": "2d96ca15bee80b7c0734fb9a6f179241bf5013747a207e7d45c19b4592a40afe",
-  "size": 67906,
-  "minLauncher": 1,
-  "minElectron": 33
- }
+  "app": "ToolBox",
+  "build": "202611240244",
+  "file": "ToolBox-202611240244.html",
+  "sha256": "776759a25c380de169c8f9ccd09965f649beb99e3a54bf6e472c517462c721e6",
+  "size": 2933131,
+  "notes": "بەشی دووەم: سیستەمی بەشەکان — چالاک/ناچالاککردنی بەشەکان لە «بەڕێوەبردنی بەشەکان»",
+  "sig": "4Tu32HK1pICaGodob0SGalaXBo4EGpEVko7qe6KmFDf4OnyYDTNCn1t9NLButvmKqYFnm7B2oMkzRvGK/Ilygw=="
 }
