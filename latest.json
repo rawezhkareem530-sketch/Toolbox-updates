@@ -1,9 +1,9 @@
 {
   "app": "ToolBox",
-  "build": "202611240244",
-  "file": "ToolBox-202611240244.html",
-  "sha256": "776759a25c380de169c8f9ccd09965f649beb99e3a54bf6e472c517462c721e6",
-  "size": 2933131,
-  "notes": "بەشی دووەم: سیستەمی بەشەکان — چالاک/ناچالاککردنی بەشەکان لە «بەڕێوەبردنی بەشەکان»",
-  "sig": "4Tu32HK1pICaGodob0SGalaXBo4EGpEVko7qe6KmFDf4OnyYDTNCn1t9NLButvmKqYFnm7B2oMkzRvGK/Ilygw=="
+  "build": "202611240253",
+  "file": "ToolBox-202611240253.html",
+  "sha256": "fe8bb0f9b79df67f2f5ce1a426bd3b84d6cc7af740ae8f1a3ad950e2c71c1d70",
+  "size": 2935397,
+  "notes": "کۆکردنەوەی بەشەکان بۆ ٦ ئەپ وەک Odoo (فرۆشتن، کۆگا، کڕین، پەیوەندییەکان، خەرجی، ڕێکخستن) + مێنیوی سەرەوەی هەر ئەپێک",
+  "sig": "zHMV2hbc2kMWFYrew+OmI2UhfKmPXMkdRLsfg8iJ2BsqgyrHqe9MKKlBUvpJEBu11/eMXGzeKAJk9T6V3zk4Gw=="
 }
