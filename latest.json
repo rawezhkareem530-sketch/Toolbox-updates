@@ -1,17 +1,17 @@
 {
- "app": "ToolBox",
- "build": "202611240306",
- "file": "ToolBox-202611240306.html",
- "sha256": "d32ca0e3c83d4891145e2bb21720222942f4127c159e1562e35b3453a6f4ac57",
- "size": 2952127,
- "notes": "شاشەی نوێی وەک Odoo (لیست، کانبان، فۆرم، گەڕان، گرووپ، ڕیزکردن) — یەکەم جار لە خەرجییەکان + ٦ ئەپ",
- "sig": "nnaJCMZDC7dWzicI4oB8lP0+Uw2QXqiQt3FuB3ZqJYaGTfZrCixxccoBe14KeE3DpYBdxxbdmfsrOr3Rw+dNqg==",
- "shell": {
-  "build": "202611162205",
-  "file": "ToolBox-shell-202611162205.json",
-  "sha256": "2d96ca15bee80b7c0734fb9a6f179241bf5013747a207e7d45c19b4592a40afe",
-  "size": 67906,
-  "minLauncher": 1,
-  "minElectron": 33
- }
+  "app": "ToolBox",
+  "build": "202611240319",
+  "file": "ToolBox-202611240319.html",
+  "sha256": "6cae7ccc2f2381b2e0962e936637fe74efe41c323b1f66fc995a596a0d0eb133",
+  "size": 2960251,
+  "notes": "داتای نموونە (ڕێکخستن › داتا) + شاشەی نوێی خەرجی وەک Odoo + ٦ ئەپ",
+  "sig": "a6OrNmJJT72Io4p7IOaapyKxZ8NAxQv/aIk16X1XcdVfkEdpUdKOYhGO0l1O6f7malfD8rUC2Fhg9X7iD8wf+A==",
+  "shell": {
+    "build": "202611162205",
+    "file": "ToolBox-shell-202611162205.json",
+    "sha256": "2d96ca15bee80b7c0734fb9a6f179241bf5013747a207e7d45c19b4592a40afe",
+    "size": 67906,
+    "minLauncher": 1,
+    "minElectron": 33
+  }
 }
