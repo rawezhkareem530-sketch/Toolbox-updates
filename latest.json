@@ -1,11 +1,11 @@
 {
  "app": "ToolBox",
- "build": "202611240253",
- "file": "ToolBox-202611240253.html",
- "sha256": "fe8bb0f9b79df67f2f5ce1a426bd3b84d6cc7af740ae8f1a3ad950e2c71c1d70",
- "size": 2935397,
- "notes": "کۆکردنەوەی بەشەکان بۆ ٦ ئەپ وەک Odoo (فرۆشتن، کۆگا، کڕین، پەیوەندییەکان، خەرجی، ڕێکخستن) + مێنیوی سەرەوەی هەر ئەپێک",
- "sig": "zHMV2hbc2kMWFYrew+OmI2UhfKmPXMkdRLsfg8iJ2BsqgyrHqe9MKKlBUvpJEBu11/eMXGzeKAJk9T6V3zk4Gw==",
+ "build": "202611240306",
+ "file": "ToolBox-202611240306.html",
+ "sha256": "d32ca0e3c83d4891145e2bb21720222942f4127c159e1562e35b3453a6f4ac57",
+ "size": 2952127,
+ "notes": "شاشەی نوێی وەک Odoo (لیست، کانبان، فۆرم، گەڕان، گرووپ، ڕیزکردن) — یەکەم جار لە خەرجییەکان + ٦ ئەپ",
+ "sig": "nnaJCMZDC7dWzicI4oB8lP0+Uw2QXqiQt3FuB3ZqJYaGTfZrCixxccoBe14KeE3DpYBdxxbdmfsrOr3Rw+dNqg==",
  "shell": {
   "build": "202611162205",
   "file": "ToolBox-shell-202611162205.json",
