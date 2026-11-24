@@ -1,9 +1,17 @@
 {
-  "app": "ToolBox",
-  "build": "202611240253",
-  "file": "ToolBox-202611240253.html",
-  "sha256": "fe8bb0f9b79df67f2f5ce1a426bd3b84d6cc7af740ae8f1a3ad950e2c71c1d70",
-  "size": 2935397,
-  "notes": "کۆکردنەوەی بەشەکان بۆ ٦ ئەپ وەک Odoo (فرۆشتن، کۆگا، کڕین، پەیوەندییەکان، خەرجی، ڕێکخستن) + مێنیوی سەرەوەی هەر ئەپێک",
-  "sig": "zHMV2hbc2kMWFYrew+OmI2UhfKmPXMkdRLsfg8iJ2BsqgyrHqe9MKKlBUvpJEBu11/eMXGzeKAJk9T6V3zk4Gw=="
+ "app": "ToolBox",
+ "build": "202611240253",
+ "file": "ToolBox-202611240253.html",
+ "sha256": "fe8bb0f9b79df67f2f5ce1a426bd3b84d6cc7af740ae8f1a3ad950e2c71c1d70",
+ "size": 2935397,
+ "notes": "کۆکردنەوەی بەشەکان بۆ ٦ ئەپ وەک Odoo (فرۆشتن، کۆگا، کڕین، پەیوەندییەکان، خەرجی، ڕێکخستن) + مێنیوی سەرەوەی هەر ئەپێک",
+ "sig": "zHMV2hbc2kMWFYrew+OmI2UhfKmPXMkdRLsfg8iJ2BsqgyrHqe9MKKlBUvpJEBu11/eMXGzeKAJk9T6V3zk4Gw==",
+ "shell": {
+  "build": "202611162205",
+  "file": "ToolBox-shell-202611162205.json",
+  "sha256": "2d96ca15bee80b7c0734fb9a6f179241bf5013747a207e7d45c19b4592a40afe",
+  "size": 67906,
+  "minLauncher": 1,
+  "minElectron": 33
+ }
 }
